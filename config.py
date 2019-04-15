@@ -51,10 +51,32 @@ class Config:
     # 定义超参数
     def get_default_params(self):
         return tf.contrib.training.HParams(
+            # 最大的passage数量
+            max_p_num=5,
+            # passage长度
+            max_p_len=400,
+            # question长度
+            max_q_len=50,
+            # answer长度
+            max_a_len=100,
             # 词向量维度
             embed_size=300,
+            # 字向量维度
+            char_embed_size=8,
             # 词典长度
-            vocab_size=1285531
+            vocab_size=1285531,
+            # dropout
+            keep_prob=0.2,
+            # hidden size
+            hidden_size=75,
+            # char hidden
+            char_hidden=100,
+            # batch size
+            batch_size=64,
+            # 是否使用 cudnn
+            use_cudnn=True,
         )
+
+
 
 

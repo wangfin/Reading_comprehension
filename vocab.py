@@ -12,7 +12,7 @@ from comprehension.config import Config
 用于将字符转换成id，将id转换成字符
 输入initial_tokens，返回embeddings
 '''
-class Vocab:
+class Vocab(object):
 
     config = Config()
 
@@ -25,7 +25,7 @@ class Vocab:
         self.token_cnt = {}
         self.lower = lower
 
-        # 填充标签
+        # 填充标签，将question和passage填充到一定的长度
         self.pad_token = '<PAD>'
         # 如果在词表中不存在，返回UNK
         self.unk_token = '<UNK>'

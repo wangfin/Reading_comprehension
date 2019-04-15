@@ -5,12 +5,6 @@
 
 # 数据的预处理
 
-'''
-实现数据预处理
-读取文件，对文件进行处理
-切分batch
-'''
-
 import json
 import numpy as np
 from comprehension.config import Config
@@ -19,13 +13,20 @@ from collections import Counter
 
 # 读取百度知道开发集
 
-class Propress:
+'''
+实现数据预处理
+读取文件，对文件进行处理
+切分batch
+'''
+
+class Propress(object):
     df = Config()
     '''
     输入为  zhidao_dev,zhidao_train,zhidao_test ; search_dev,search_train,search_test  
     实现了用于加载和使用百度阅读理解数据
     输入：max_p_num, max_p_len, max_q_len,train_files=None, dev_files=None, test_files=None
     '''
+
     def __init__(self, max_p_num, max_p_len, max_q_len,
                  train_files=None, dev_files=None, test_files=None):
 
@@ -42,17 +43,17 @@ class Propress:
         # 获取三个数据集的内容
         if train_files:
             for train_file in train_files:
-                self.train_set += self.load_datasets(train_file, train=True)
+                self.train_set += self._load_datasets(train_file, train=True)
             self.logger.info('Train set size: {} questions.'.format(len(self.train_set)))
 
         if dev_files:
             for dev_file in dev_files:
-                self.dev_set += self.load_datasets(dev_file)
+                self.dev_set += self._load_datasets(dev_file)
             self.logger.info('Dev set size: {} questions.'.format(len(self.dev_set)))
 
         if test_files:
             for test_file in test_files:
-                self.test_set += self.load_datasets(test_file)
+                self.test_set += self._load_datasets(test_file)
             self.logger.info('Test set size: {} questions.'.format(len(self.test_set)))
 
         # if filename == 'zhidao_dev':
@@ -73,7 +74,7 @@ class Propress:
     输入：filename，是否train
     输出：处理完的内容
     '''
-    def load_datasets(self, filename, train=False):
+    def _load_datasets(self, filename, train=False):
         contents = []
         file = open(filename, 'r', encoding='utf8')
 
@@ -167,8 +168,9 @@ class Propress:
         for sidx, sample in enumerate(batch_data['raw_data']):
             # 使用max_passage_num
             for pidx in range(max_passage_num):
-                # 如果这个idx小于
+                # 如果这个idx小于passages的长度
                 if pidx < len(sample['passages']):
+                    # data 数据里面有question_tokens_ids
                     batch_data['question_token_ids'].append(sample['question_token_ids'])
                     batch_data['question_length'].append(len(sample['question_token_ids']))
                     passage_token_ids = sample['passages'][pidx]['passage_token_ids']
@@ -179,22 +181,27 @@ class Propress:
                     batch_data['question_length'].append(0)
                     batch_data['passage_token_ids'].append([])
                     batch_data['passage_length'].append(0)
+        # 填充完的数据
         batch_data, padded_p_len, padded_q_len = self._dynamic_padding(batch_data, pad_id)
         for sample in batch_data['raw_data']:
+            # 如果有答案所在的段落标识并且长度大于0，也就是存在这个
             if 'answer_passages' in sample and len(sample['answer_passages']):
+                # 填充段落长度 * 答案所在段落
                 gold_passage_offset = padded_p_len * sample['answer_passages'][0]
                 batch_data['start_id'].append(gold_passage_offset + sample['answer_spans'][0][0])
                 batch_data['end_id'].append(gold_passage_offset + sample['answer_spans'][0][1])
             else:
-                # fake span for some samples, only valid for testing
+                # 某些样品的假跨度，仅对测试有效
                 batch_data['start_id'].append(0)
                 batch_data['end_id'].append(0)
         return batch_data
 
+    '''
+    使用pad_id动态填充batch_data
+    输入：数据，pad_id
+    输出：batch_data，passage的填充长度，question的填充长度
+    '''
     def _dynamic_padding(self, batch_data, pad_id):
-        """
-        Dynamically pads the batch_data with pad_id
-        """
         pad_p_len = min(self.max_p_len, max(batch_data['passage_length']))
         pad_q_len = min(self.max_q_len, max(batch_data['question_length']))
         batch_data['passage_token_ids'] = [(ids + [pad_id] * (pad_p_len - len(ids)))[: pad_p_len]
@@ -203,6 +210,68 @@ class Propress:
                                             for ids in batch_data['question_token_ids']]
         return batch_data, pad_p_len, pad_q_len
 
+    '''
+    迭代数据集中所有的单词
+    输入：set_name，如果设置就使用特殊的数据集
+    输出：迭代器
+    '''
+    def word_iter(self, set_name=None):
+        if set_name is None:
+            data_set = self.train_set + self.dev_set + self.test_set
+        elif set_name == 'train':
+            data_set = self.train_set
+        elif set_name == 'dev':
+            data_set = self.dev_set
+        elif set_name == 'test':
+            data_set = self.test_set
+        else:
+            raise NotImplementedError('No data set named as {}'.format(set_name))
+        if data_set is not None:
+            for sample in data_set:
+                for token in sample['question_tokens']:
+                    yield token
+                for passage in sample['passages']:
+                    for token in passage['passage_tokens']:
+                        yield token
+
+    '''
+    将原始数据集中的question和passage转换为ids
+    输入：该数据集上的词汇表
+    '''
+    def convert_to_ids(self, vocab):
+        for data_set in [self.train_set, self.dev_set, self.test_set]:
+            if data_set is None:
+                continue
+            for sample in data_set:
+                sample['question_token_ids'] = vocab.convert_to_ids(sample['question_tokens'])
+                for passage in sample['passages']:
+                    passage['passage_token_ids'] = vocab.convert_to_ids(passage['passage_tokens'])
+
+    '''
+    生成特定数据集的数据批次(train/dev/test)
+    输入：数据集，batch的数量，pad_id，打乱数据集
+    输出：batch的迭代器
+    '''
+    def gen_mini_batches(self, set_name, batch_size, pad_id, shuffle=True):
+        if set_name == 'train':
+            data = self.train_set
+        elif set_name == 'dev':
+            data = self.dev_set
+        elif set_name == 'test':
+            data = self.test_set
+        else:
+            raise NotImplementedError('No data set named as {}'.format(set_name))
+        data_size = len(data)
+        # 在给定的时间间隔内返回均匀间隔的值。
+        indices = np.arange(data_size)
+        # 打乱数据集
+        if shuffle:
+            np.random.shuffle(indices)
+        # 生成batch数据，开始0，结束data_size，步长batch_size
+        for batch_start in np.arange(0, data_size, batch_size):
+            batch_indices = indices[batch_start: batch_start + batch_size]
+            # 返回one_mini_batch
+            yield self._one_mini_batch(data, batch_indices, pad_id)
 
 
 if __name__ == '__main__':
