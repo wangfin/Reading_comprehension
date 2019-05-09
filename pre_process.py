@@ -7,7 +7,7 @@
 
 import json
 import numpy as np
-from comprehension.config import Config
+from config import Config
 import logging
 from collections import Counter
 
@@ -20,24 +20,23 @@ from collections import Counter
 '''
 
 class Propress(object):
-    df = Config()
     '''
-    输入为  zhidao_dev,zhidao_train,zhidao_test ; search_dev,search_train,search_test  
     实现了用于加载和使用百度阅读理解数据
     输入：max_p_num, max_p_len, max_q_len,train_files=None, dev_files=None, test_files=None
     '''
 
-    def __init__(self, max_p_num, max_p_len, max_q_len,
+    def __init__(self, max_p_num, max_p_len, max_q_len, max_char_len,
                  train_files=None, dev_files=None, test_files=None):
 
         # 获取名字为brc的记录器
         # logging.basicConfig(filename=self.df.get_filepath().log_file)
-        self.logger = logging.getLogger("mcr")
+        self.logger = logging.getLogger("brc")
         self.logger.setLevel(logging.DEBUG)
         # passage和question
         self.max_p_num = max_p_num
         self.max_p_len = max_p_len
         self.max_q_len = max_q_len
+        self.max_char_len = max_char_len
 
         self.train_set, self.dev_set, self.test_set = [], [], []
         # 获取三个数据集的内容
@@ -56,19 +55,6 @@ class Propress(object):
                 self.test_set += self._load_datasets(test_file)
             self.logger.info('Test set size: {} questions.'.format(len(self.test_set)))
 
-        # if filename == 'zhidao_dev':
-        #     file = open(self.df.get_filepath().zhidao_dev_file, 'r', encoding='utf8')
-        # elif filename == 'zhidao_train':
-        #     file = open(self.df.get_filepath().zhidao_train_file, 'r', encoding='utf8')
-        # elif filename == 'zhidao_test':
-        #     file = open(self.df.get_filepath().zhidao_test_file, 'r', encoding='utf8')
-        # elif filename == 'search_dev':
-        #     file = open(self.df.get_filepath().search_dev_file, 'r', encoding='utf8')
-        # elif filename == 'search_train':
-        #     file = open(self.df.get_filepath().search_train_file, 'r', encoding='utf8')
-        # elif filename == 'search_test':
-        #     file = open(self.df.get_filepath().search_test_file, 'r', encoding='utf8')
-
     '''
     载入文件
     输入：filename，是否train
@@ -76,87 +62,118 @@ class Propress(object):
     '''
     def _load_datasets(self, filename, train=False):
         contents = []
-        file = open(filename, 'r', encoding='utf8')
 
-        # 只能使用一行行的读取方式，不然会报错
-        for line in file.readlines():
-            # dic = np.array(json.loads(line))
-            # np.append(contents, dic)
-            dic = json.loads(line.strip())
-            # 是否为训练文件
-            if train:
-                # 不存在answer段落
-                if len(dic['answer_spans']) == 0:
-                    continue
-                # 答案的长度大于我们设定的最大的passage的长度，这种也跳过
-                if dic['answer_spans'][0][1] >= self.max_p_len:
-                    continue
+        max_char_num = 0
+        max_char_list = []
 
-            # 把里面的answer_docs选取出来，answer_docs放的是answer中真正的答案，也就是fake_answers的内容
-            # 这个值是一个int
-            if 'answer_docs' in dic:
-                dic['answer_passages'] = dic['answer_docs']
-
-            # 获取切分好的问句
-            dic['question_tokens'] = dic['segmented_question']
-
-            # 设置文档
-            dic['passages'] = []
-
-            # 获取documents中的数据
-            # 这个是一个集合的迭代器，前面是id，后面是document的内容
-            for doc_idx, doc in enumerate(dic['documents']):
-                # 进行训练
+        with open(filename, 'r', encoding='utf8') as file:
+            # 只能使用一行行的读取方式，不然会报错
+            for line in file.readlines():
+                # dic = np.array(json.loads(line))
+                # np.append(contents, dic)
+                dic = json.loads(line.strip())
+                # 是否为训练文件
                 if train:
-                    # 这个数据集很好的为我们找到了在para中与问题最相近的答案，减少了我们去考虑过多的para内容
-                    # 这个值是一个int，标注了哪一段最相近
-                    most_related_para = doc['most_related_para']
-                    dic['passages'].append({
-                        'passage_tokens': doc['segmented_paragraphs'][most_related_para],  # 选取了分词好的最相关段落，一段
-                        'is_selected': doc['is_selected']  # 是否被选取
-                    })
-                else:
-                    # 不进行训练
-                    para_infos = []
-                    # 在分词后的段落列表中循环
-                    for para_tokens in doc['segmented_paragraphs']:
-                        # 获取分词的问题
-                        question_tokens = dic['segmented_question']
-                        # 先计数para_tokens，然后计数question_tokens，最后统计两个dict的交集
-                        # 也就是获取段落tokens和问题tokens这两个中相同的tokens
-                        common_with_question = Counter(para_tokens) & Counter(question_tokens)
-                        # 对交集，也就是相同token出现次数进行求和
-                        correct_preds = sum(common_with_question.values())
-                        # 如果没有交集token
+                    # 不存在answer段落
+                    if len(dic['answer_spans']) == 0:
+                        continue
+                    # 答案的长度大于我们设定的最大的passage的长度，这种也跳过
+                    if dic['answer_spans'][0][1] >= self.max_p_len:
+                        continue
 
-                        if correct_preds == 0:
-                            recall_wrt_question = 0
-                        else:
-                            recall_wrt_question = float(correct_preds) / len(question_tokens)
+                # 把里面的answer_docs选取出来，answer_docs放的是answer中真正的答案，也就是fake_answers的内容
+                # 这个值是一个int
+                if 'answer_docs' in dic:
+                    dic['answer_passages'] = dic['answer_docs']
 
-                        para_infos.append((para_tokens, recall_wrt_question, len(para_tokens)))
+                # question_chars = [list(token) for token in dic['question_tokens']]
+                # dic['question_chars'] = question_chars
 
-                    para_infos.sort(key=lambda x: (-x[1], x[2]))
-                    fake_passage_tokens = []
-                    for para_info in para_infos[:1]:
-                        fake_passage_tokens += para_info[0]
-                    dic['passages'].append({'passage_tokens': fake_passage_tokens})
-            contents.append(dic)
-        # print(contents[0])
+                # 获取切分好的问句
+                question_tokens = dic['segmented_question']
+                dic['question_tokens'] = question_tokens
+                dic['question_chars'] = [list(token) for token in question_tokens]
 
-        return contents
+                for char in dic['question_chars']:
+                    if len(char) > max_char_num:
+                        max_char_num = len(char)
+                        max_char_list = char
+
+                # 设置文档
+                dic['passages'] = []
+
+                # 获取documents中的数据
+                # 这个是一个集合的迭代器，前面是id，后面是document的内容
+                for doc_idx, doc in enumerate(dic['documents']):
+                    # 进行训练
+                    if train:
+                        # 这个数据集很好的为我们找到了在para中与问题最相近的答案，减少了我们去考虑过多的para内容
+                        # 这个值是一个int，标注了哪一段最相近
+                        most_related_para = doc['most_related_para']
+
+                        passage_tokens = doc['segmented_paragraphs'][most_related_para]
+                        passage_chars = [list(token) for token in passage_tokens]
+
+                        # passage_chars = [list(token) for token in doc['segmented_paragraphs'][most_related_para]]
+
+                        for char in passage_chars:
+                            if len(char) > max_char_num:
+                                max_char_num = len(char)
+                                max_char_list = char
+
+                        dic['passages'].append({
+                            'passage_tokens': passage_tokens,  # 选取了分词好的最相关段落，一段
+                            'is_selected': doc['is_selected'],  # 是否被选取
+                            'passage_chars': passage_chars
+                        })
+                    else:
+                        # 不进行训练
+                        para_infos = []
+                        # 在分词后的段落列表中循环
+                        for para_tokens in doc['segmented_paragraphs']:
+                            para_tokens = para_tokens
+                            # 获取分词的问题
+                            question_tokens = dic['segmented_question']
+                            # 先计数para_tokens，然后计数question_tokens，最后统计两个dict的交集
+                            # 也就是获取段落tokens和问题tokens这两个中相同的tokens
+                            common_with_question = Counter(para_tokens) & Counter(question_tokens)
+                            # 对交集，也就是相同token出现次数进行求和
+                            correct_preds = sum(common_with_question.values())
+                            # 如果没有交集token
+
+                            if correct_preds == 0:
+                                recall_wrt_question = 0
+                            else:
+                                recall_wrt_question = float(correct_preds) / len(question_tokens)
+
+                            para_infos.append((para_tokens, recall_wrt_question, len(para_tokens)))
+
+                        para_infos.sort(key=lambda x: (-x[1], x[2]))
+                        fake_passage_tokens = []
+                        for para_info in para_infos[:1]:
+                            fake_passage_tokens += para_info[0]
+                        dic['passages'].append({'passage_tokens': fake_passage_tokens,
+                                                'passage_chars': [list(token) for token in fake_passage_tokens]
+                                                })
+
+                contents.append(dic)
+            # print(contents[0])
+
+            return contents
 
     '''
     获取一个mini batch
     输入：所有的数据，要选择的样本的索引，pad_id
     输出：一个batch数据
     '''
-    def _one_mini_batch(self, data, indices, pad_id):
+    def _one_mini_batch(self, data, indices, pad_id, pad_char_id):
         # 定义一个batch的数据
         batch_data = {'raw_data': [data[i] for i in indices],
                       'question_token_ids': [],
+                      'question_char_ids': [],
                       'question_length': [],
                       'passage_token_ids': [],
+                      'passage_char_ids': [],
                       'passage_length': [],
                       'start_id': [],
                       'end_id': []}
@@ -172,17 +189,22 @@ class Propress(object):
                 if pidx < len(sample['passages']):
                     # data 数据里面有question_tokens_ids
                     batch_data['question_token_ids'].append(sample['question_token_ids'])
+                    batch_data['question_char_ids'].append(sample['question_char_ids'])
                     batch_data['question_length'].append(len(sample['question_token_ids']))
                     passage_token_ids = sample['passages'][pidx]['passage_token_ids']
+                    passage_char_ids = sample['passages'][pidx]['passage_char_ids']
                     batch_data['passage_token_ids'].append(passage_token_ids)
                     batch_data['passage_length'].append(min(len(passage_token_ids), self.max_p_len))
+                    batch_data['passage_char_ids'].append(passage_char_ids)
                 else:
                     batch_data['question_token_ids'].append([])
                     batch_data['question_length'].append(0)
+                    batch_data['question_char_ids'].append([[]])
                     batch_data['passage_token_ids'].append([])
                     batch_data['passage_length'].append(0)
+                    batch_data['passage_char_ids'].append([[]])
         # 填充完的数据
-        batch_data, padded_p_len, padded_q_len = self._dynamic_padding(batch_data, pad_id)
+        batch_data, padded_p_len, padded_q_len = self._dynamic_padding(batch_data, pad_id, pad_char_id)
         for sample in batch_data['raw_data']:
             # 如果有答案所在的段落标识并且长度大于0，也就是存在这个
             if 'answer_passages' in sample and len(sample['answer_passages']):
@@ -201,13 +223,37 @@ class Propress(object):
     输入：数据，pad_id
     输出：batch_data，passage的填充长度，question的填充长度
     '''
-    def _dynamic_padding(self, batch_data, pad_id):
+    def _dynamic_padding(self, batch_data, pad_id, pad_char_id):
+        pad_char_len = self.max_char_len
         pad_p_len = min(self.max_p_len, max(batch_data['passage_length']))
         pad_q_len = min(self.max_q_len, max(batch_data['question_length']))
         batch_data['passage_token_ids'] = [(ids + [pad_id] * (pad_p_len - len(ids)))[: pad_p_len]
                                            for ids in batch_data['passage_token_ids']]
+
+        for index, char_list in enumerate(batch_data['passage_char_ids']):
+            # print(batch_data['passage_char_ids'])
+            for char_index in range(len(char_list)):
+                if len(char_list[char_index]) >= pad_char_len:
+                    char_list[char_index] = char_list[char_index][:self.max_char_len]
+                else:
+                    char_list[char_index] += [pad_char_id] * (pad_char_len - len(char_list[char_index]))
+            batch_data['passage_char_ids'][index] = char_list
+        batch_data['passage_char_ids'] = [(ids + [[pad_char_id] * pad_char_len] * (pad_p_len - len(ids)))[:pad_p_len]
+                                          for ids in batch_data['passage_char_ids']]
+
         batch_data['question_token_ids'] = [(ids + [pad_id] * (pad_q_len - len(ids)))[: pad_q_len]
                                             for ids in batch_data['question_token_ids']]
+
+        for index, char_list in enumerate(batch_data['question_char_ids']):
+            for char_index in range(len(char_list)):
+                if len(char_list[char_index]) >= pad_char_len:
+                    char_list[char_index] = char_list[char_index][:self.max_char_len]
+                else:
+                    char_list[char_index] += [pad_char_id] * (pad_char_len - len(char_list[char_index]))
+            batch_data['question_char_ids'][index] = char_list
+        batch_data['question_char_ids'] = [(ids + [[pad_char_id] * pad_char_len] * (pad_q_len - len(ids)))[:pad_q_len]
+                                           for ids in batch_data['question_char_ids']]
+
         return batch_data, pad_p_len, pad_q_len
 
     '''
@@ -243,16 +289,18 @@ class Propress(object):
             if data_set is None:
                 continue
             for sample in data_set:
-                sample['question_token_ids'] = vocab.convert_to_ids(sample['question_tokens'])
+                sample['question_token_ids'] = vocab.convert_word_to_ids(sample['question_tokens'])
+                sample["question_char_ids"] = vocab.convert_char_to_ids(sample['question_chars'])
                 for passage in sample['passages']:
-                    passage['passage_token_ids'] = vocab.convert_to_ids(passage['passage_tokens'])
+                    passage['passage_token_ids'] = vocab.convert_word_to_ids(passage['passage_tokens'])
+                    passage['passage_char_ids'] = vocab.convert_char_to_ids(passage['passage_chars'])
 
     '''
     生成特定数据集的数据批次(train/dev/test)
     输入：数据集，batch的数量，pad_id，打乱数据集
     输出：batch的迭代器
     '''
-    def gen_mini_batches(self, set_name, batch_size, pad_id, shuffle=True):
+    def next_batch(self, set_name, batch_size, pad_id, pad_char_id, shuffle=True):
         if set_name == 'train':
             data = self.train_set
         elif set_name == 'dev':
@@ -271,10 +319,10 @@ class Propress(object):
         for batch_start in np.arange(0, data_size, batch_size):
             batch_indices = indices[batch_start: batch_start + batch_size]
             # 返回one_mini_batch
-            yield self._one_mini_batch(data, batch_indices, pad_id)
+            yield self._one_mini_batch(data, batch_indices, pad_id, pad_char_id)
 
 
 if __name__ == '__main__':
     df = Config()
     dev = df.get_filepath().zhidao_dev_file
-    pro = Propress(100, 100, 100, dev_files=[dev])
+    pro = Propress(100, 100, 100, 16, dev_files=[dev])

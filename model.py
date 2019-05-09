@@ -4,10 +4,14 @@
 # @File    : model.py
 
 # 模型文件
-
-from comprehension.config import Config
+import json
+import logging
+import os
+import time
+from config import Config
 import tensorflow as tf
-from comprehension.layers import cudnn_gru, native_gru, dropout, dot_attention
+from layers import cudnn_gru, native_gru, dropout, dot_attention, summ, ptr_net
+from utils.dureader_eval import compute_bleu_rouge, normalize
 
 '''
 model文件
@@ -22,132 +26,528 @@ class Model(object):
     # 引入文件、超参数等在config文件中
     config = Config()
 
-    def __init__(self, batch, word_embeddings=None, char_embeddings=None, trainable=True, opt=True):
-        # 定义属性
-        self.global_step = tf.get_variable('global_step', shape=[], dtype=tf.int32,
-                                           initializer=tf.constant_initializer(0), trainable=False)
-        # 是否训练
-        self.is_train = tf.get_variable(
-            "is_train", shape=[], dtype=tf.bool, trainable=False)
-        # 词向量
-        self.word_embeddings = tf.get_variable(
-            "word_embeddings", initializer=tf.constant(word_embeddings, dtype=tf.float32), trainable=False)
-        # 字向量
-        self.char_embeddings = tf.get_variable(
-            "char_embeddings", initializer=tf.constant(char_embeddings, dtype=tf.float32))
-        # 字向量维度
-        self.char_embed_size = self.config.get_default_params().char_embed_size
-        # 词向量维度
-        self.embed_size = self.config.get_default_params().embed_size
-        # 字长度
-        # self.char_len = self.config.get_default_params().
+    def __init__(self, vocab, trainable=True):
 
+        # logger
+        self.logger = logging.getLogger("brc")
+        # vocabulary
+        self.vocab = vocab
+        self.trainable = trainable
+        # self.is_train = tf.get_variable(
+        #     "is_train", shape=[], dtype=tf.bool, trainable=False)
+        # 使用的优化函数
+        self.optim_type = 'adam'
+
+        # batch的size
         self.batch_size = self.config.get_default_params().batch_size
+        # 隐藏单元
         self.char_hidden = self.config.get_default_params().char_hidden
-        self.hidden_size = self.config.get_default_params().hidden
+        self.hidden_size = self.config.get_default_params().hidden_size
+        self.attn_size = self.config.get_default_params().attn_size
 
         # size limit
         self.max_p_num = self.config.get_default_params().max_p_num
         self.max_p_len = self.config.get_default_params().max_p_len
         self.max_q_len = self.config.get_default_params().max_q_len
         self.max_a_len = self.config.get_default_params().max_a_len
+        self.max_ch_len = self.config.get_default_params().max_ch_len
 
         # gru单元，是否使用cundnn
         self.gru = cudnn_gru if self.config.get_default_params().use_cudnn else native_gru
         # keep_prob
         self.keep_prob = self.config.get_default_params().keep_prob
+        # ptr_keep_prob
+        self.ptr_keep_prob = self.config.get_default_params().ptr_keep_prob
+
+        # session info
+        sess_config = tf.ConfigProto()
+        sess_config.gpu_options.allow_growth = False
+        self.sess = tf.Session(config=sess_config)
+
+        # 构建计算图
+        self._build_graph()
 
         # 保存模型
         self.saver = tf.train.Saver()
+
+        # initialize the model
+        self.sess.run(tf.global_variables_initializer())
 
     '''
     定义placeholder
     '''
     def _set_placeholders(self):
-        # passage的索引
-        self.p = tf.placeholder(tf.int32, [None, None])
-        # question索引
-        self.q = tf.placeholder(tf.int32, [None, None])
-        # passage的长度
-        self.p_length = tf.placeholder(tf.int32, [None])
-        # question的长度
-        self.q_length = tf.placeholder(tf.int32, [None])
-        # 开始
-        self.start_label = tf.placeholder(tf.int32, [None])
-        # 结束
-        self.end_label = tf.placeholder(tf.int32, [None])
+        # 训练时创造的参数
+        if self.trainable:
+            # passage的索引
+            self.p = tf.placeholder(tf.int32, [self.batch_size*self.max_p_num, self.max_p_len], "passage")
+            # question索引
+            self.q = tf.placeholder(tf.int32, [self.batch_size*self.max_p_num, self.max_q_len], "question")
+
+            self.ph = tf.placeholder(tf.int32, [self.batch_size*self.max_p_num, self.max_p_len, self.max_ch_len],
+                                     "passage_char")
+            self.qh = tf.placeholder(tf.int32, [self.batch_size*self.max_p_num, self.max_q_len, self.max_ch_len],
+                                     "question_char")
+
+            # 开始
+            self.start_label = tf.placeholder(tf.int32, [self.batch_size], "start_label")
+            # 结束
+            self.end_label = tf.placeholder(tf.int32, [self.batch_size], "end_label")
+        # 不训练
+        else:
+            # passage的索引
+            self.p = tf.placeholder(tf.int32, [None, self.max_p_len], "passage")
+            # question索引
+            self.q = tf.placeholder(tf.int32, [None, self.max_q_len], "question")
+
+            self.ph = tf.placeholder(tf.int32, [None, self.max_p_len, self.max_ch_len], "passage_char")
+            self.qh = tf.placeholder(tf.int32, [None, self.max_q_len, self.max_ch_len], "question_char")
+
+            # 开始
+            self.start_label = tf.placeholder(tf.int32, [None], "start_label")
+            # 结束
+            self.end_label = tf.placeholder(tf.int32, [None], "end_label")
+
+
+        # 定义属性
+        self.global_step = tf.get_variable('global_step', shape=[], dtype=tf.int32,
+                                           initializer=tf.constant_initializer(0), trainable=False)
+
+        # padding label
+        self.p_mask = tf.cast(self.p, tf.bool)  # index 0 is padding symbol  N x self.max_p_num, max_p_len
+        self.q_mask = tf.cast(self.q, tf.bool)
+        self.p_len = tf.reduce_sum(tf.cast(self.p_mask, tf.int32), axis=1)
+        self.q_len = tf.reduce_sum(tf.cast(self.q_mask, tf.int32), axis=1)
+        self.is_train = tf.get_variable("is_train", shape=[], dtype=tf.bool, trainable=False)
+
+        # self.dropout = tf.placeholder(tf.float32, name="dropout")
+        # print(self.p_mask.get_shape().as_list())
+        # print(self.start_label.get_shape().as_list())
 
     '''
     下面是模型的每一层，里面包含了实际的模型
     '''
+    '''
+    构建计算图
+    '''
+    def _build_graph(self):
+        start_t = time.time()
+        self._set_placeholders()
+        self._embed()
+        self._encode()
+        self._self_match()
+        self._predict()
+        self._create_train_op()
 
+        self.logger.info('Time to build graph: {} s'.format(time.time() - start_t))
     '''
     embedding层
     '''
-    def embedding(self):
-        # N batch_size;PL c_maxlen;CL char_limit;dc char_dim
+    def _embed(self):
         with tf.variable_scope("emb"):
+            # 字向量
+            self.pretrained_char_mat = tf.get_variable(
+                "char_embeddings",
+                [self.vocab.get_char_size() - 2, self.vocab.char_embed_size],
+                dtype=tf.float32,
+                initializer=tf.constant_initializer(self.vocab.char_embeddings[2:], dtype=tf.float32),
+                trainable=False)
+            # 字向量的pad
+            self.char_pad_unk_mat = tf.get_variable(
+                "char_unk_pad",
+                [2, self.pretrained_char_mat.get_shape()[1]],
+                dtype=tf.float32,
+                initializer=tf.constant_initializer(self.vocab.char_embeddings[:2], dtype=tf.float32),
+                trainable=True)
+
+            # 词向量
+            self.pretrained_word_mat = tf.get_variable(
+                "word_embeddings",
+                [self.vocab.get_vocab_size() - 2, self.vocab.word_embed_size],
+                initializer=tf.constant_initializer(self.vocab.word_embeddings[2:], dtype=tf.float32),
+                trainable=False)
+            # 词向量的pad
+            self.word_pad_unk_mat = tf.get_variable(
+                "word_unk_pad",
+                [2, self.pretrained_word_mat.get_shape()[1]],
+                dtype=tf.float32,
+                initializer=tf.constant_initializer(self.vocab.word_embeddings[:2], dtype=tf.float32),
+                trainable=True)
+
+            self.char_embeddings = tf.concat([self.char_pad_unk_mat, self.pretrained_char_mat], axis=0)
+            self.word_embeddings = tf.concat([self.word_pad_unk_mat, self.pretrained_word_mat], axis=0)
+
+            # 字符
+            self.ph_len = tf.reshape(tf.reduce_sum(
+                tf.cast(tf.cast(self.ph, tf.bool), tf.int32), axis=2), [-1])
+            self.qh_len = tf.reshape(tf.reduce_sum(
+                tf.cast(tf.cast(self.qh, tf.bool), tf.int32), axis=2), [-1])
+
+            # print(self.word_embeddings.get_shape().as_list())
+
             # 字符向量
             with tf.variable_scope("char"):
-                p_char_emb = tf.nn.embedding_lookup(self.char_embeddings, self.p)
-                q_char_emb = tf.nn.embedding_lookup(self.char_embeddings, self.q)
+                p_char_emb = tf.reshape(tf.nn.embedding_lookup(self.char_embeddings, self.ph),
+                    [self.batch_size * self.max_p_len * self.max_p_num, self.max_ch_len, self.vocab.char_embed_size])
+                q_char_emb = tf.reshape(tf.nn.embedding_lookup(self.char_embeddings, self.qh),
+                    [self.batch_size * self.max_q_len * self.max_p_num, self.max_ch_len, self.vocab.char_embed_size])
+
+                # p_char_emb = tf.nn.embedding_lookup(self.char_embeddings, self.ph)
+                # q_char_emb = tf.nn.embedding_lookup(self.char_embeddings, self.qh)
+                # print(p_char_emb.get_shape().as_list())
+                # print(q_char_emb.get_shape().as_list())
+
                 p_char_emb = dropout(
                     p_char_emb, keep_prob=self.keep_prob, is_train=self.is_train)
                 q_char_emb = dropout(
                     q_char_emb, keep_prob=self.keep_prob, is_train=self.is_train)
+
                 # 门控递归单元
                 # 前向
                 cell_fw = tf.contrib.rnn.GRUCell(self.char_hidden)
                 # 后向
                 cell_bw = tf.contrib.rnn.GRUCell(self.char_hidden)
-
-                # 双向递归网络的动态版本
-                # inputs必须是 [batch_size, max_time, ...]
-                # 返回值output_fw [batch_size,max_time,cell_fw.output_size]
-                # output_bw [batch_size,max_time,cell_bw.output_size]
+                '''
+                    双向递归网络的动态版本
+                    inputs必须是 [batch_size, max_time, ...]
+                    返回值output_fw [batch_size,max_time,cell_fw.output_size]
+                    output_bw [batch_size,max_time,cell_bw.output_size]
+                '''
+                # char-level向量是先输入预训练向量，然后输入双向RNN中
                 _, (state_fw, state_bw) = tf.nn.bidirectional_dynamic_rnn(
-                    cell_fw, cell_bw, p_char_emb, self.max_p_len, dtype=tf.float32)
+                    cell_fw, cell_bw, p_char_emb, self.ph_len, dtype=tf.float32)
                 p_char_emb = tf.concat([state_fw, state_bw], axis=1)
+
                 _, (state_fw, state_bw) = tf.nn.bidirectional_dynamic_rnn(
-                    cell_fw, cell_bw, q_char_emb, self.max_q_len, dtype=tf.float32)
+                    cell_fw, cell_bw, q_char_emb, self.qh_len, dtype=tf.float32)
                 q_char_emb = tf.concat([state_fw, state_bw], axis=1)
-                q_char_emb = tf.reshape(q_char_emb, [self.batch_size, self.q_length, 2 * self.char_hidden])
-                p_char_emb = tf.reshape(p_char_emb, [self.batch_size, self.p_length, 2 * self.char_hidden])
+
+                # print(p_char_emb.get_shape().as_list())
+                # print(q_char_emb.get_shape().as_list())
+
+                p_char_emb = tf.reshape(p_char_emb,
+                                        [self.batch_size * self.max_p_num, self.max_p_len, 2 * self.char_hidden])
+                q_char_emb = tf.reshape(q_char_emb,
+                                        [self.batch_size * self.max_p_num, self.max_q_len, 2 * self.char_hidden])
 
             # 词向量
             with tf.name_scope("word"):
                 p_emb = tf.nn.embedding_lookup(self.word_embeddings, self.p)
                 q_emb = tf.nn.embedding_lookup(self.word_embeddings, self.q)
 
-            p_embeddings = tf.concat([p_emb, p_char_emb], axis=2)
-            q_embeddings = tf.concat([q_emb, q_char_emb], axis=2)
+            # 最后得到passage和question的embeddings
+            # 是由word-level 和 character-level组合成的
+            self.p_embeddings = tf.concat([p_emb, p_char_emb], axis=2)
+            self.q_embeddings = tf.concat([q_emb, q_char_emb], axis=2)
 
-        return p_embeddings, q_embeddings
+            '''
+                p_embeddings [320, 400, 500]
+                q_embeddings [320, 60, 500]
+            '''
 
     '''
     encoding层
     '''
-    def encode(self, passage_emb, question_emb):
+    def _encode(self):
 
+        # 3层的GRU单元
         rnn = self.gru(num_layers=3,
                        num_units=self.hidden_size,
-                       batch_size=self.batch_size,
-                       input_size=passage_emb.get_shape().as_list()[-1],
+                       batch_size=self.batch_size * self.max_p_num,
+                       input_size=self.p_embeddings.get_shape().as_list()[-1],
                        keep_prob=self.keep_prob, is_train=self.is_train)
-        pass_encoding = rnn(passage_emb, seq_len=self.p_length)
-        ques_encoding = rnn(question_emb, seq_len=self.q_length)
+        self.pass_encoding = rnn(self.p_embeddings, seq_len=self.p_len)
+        self.ques_encoding = rnn(self.q_embeddings, seq_len=self.q_len)
+        '''
+            pass_encoding [320, 400, 450]
+            ques_encoding [320, 60, 450]
+        '''
 
     '''
-    attention层
+    自我的self_match匹配
     '''
-    def attention(self):
+    def _self_match(self):
+
+        # 先计算attention
         with tf.variable_scope("attention"):
-            qc_att = dot_attention(c, q, mask=self.q_mask, hidden=d,
-                                   keep_prob=config.keep_prob, is_train=self.is_train)
-            rnn = gru(num_layers=1, num_units=d, batch_size=N, input_size=qc_att.get_shape(
-            ).as_list()[-1], keep_prob=config.keep_prob, is_train=self.is_train)
-            att = rnn(qc_att, seq_len=self.c_len)
+            # 在question的attention下的passage
+            qc_att = dot_attention(self.pass_encoding, self.ques_encoding, mask=self.q_mask, hidden=self.attn_size,
+                                   keep_prob=self.keep_prob, is_train=self.is_train)
+            rnn = self.gru(num_layers=1, num_units=self.hidden_size, batch_size=self.batch_size * self.max_p_num,
+                           input_size=qc_att.get_shape().as_list()[-1],
+                           keep_prob=self.keep_prob, is_train=self.is_train)
+            att = rnn(qc_att, seq_len=self.p_len)
 
+        # 进行match匹配
+        with tf.variable_scope("match"):
+            # 计算self_attention，在上一步的rnn得出的编码，在这里进一步计算self-attention
+            self_att = dot_attention(
+                att, att, mask=self.p_mask, hidden=self.attn_size, keep_prob=self.keep_prob, is_train=self.is_train)
+            rnn = self.gru(num_layers=1, num_units=self.hidden_size, batch_size=self.batch_size * self.max_p_num,
+                           input_size=self_att.get_shape().as_list()[-1],
+                           keep_prob=self.keep_prob, is_train=self.is_train)
+            self.match = rnn(self_att, seq_len=self.q_len)
+            '''
+                match [320, 400, 150]
+            '''
+
+    '''
+    预测函数，进行最终的预测
+    '''
+    def _predict(self):
+
+        # pointer 指针网络
+        # 指针网络就是softmax网络的特例
+        with tf.variable_scope("pointer"):
+            init = summ(self.ques_encoding[:, :, -2 * self.hidden_size:], self.hidden_size, mask=self.q_mask,
+                        keep_prob=self.ptr_keep_prob, is_train=self.is_train)
+
+            pointer = ptr_net(batch=self.batch_size * self.max_p_num,
+                              hidden=init.get_shape().as_list()[-1],
+                              keep_prob=self.ptr_keep_prob,
+                              is_train=self.is_train)
+            self.logits1, self.logits2 = pointer(init, self.match, self.hidden_size, self.p_mask)
+
+        # 进行预测
+        with tf.variable_scope("predict"):
+            outer = tf.matmul(tf.expand_dims(tf.nn.softmax(self.logits1), axis=2),
+                              tf.expand_dims(tf.nn.softmax(self.logits2), axis=1))
+            outer = tf.matrix_band_part(outer, 0, 15)
+            self.yp1 = tf.argmax(tf.reduce_max(outer, axis=2), axis=1)
+            self.yp2 = tf.argmax(tf.reduce_max(outer, axis=1), axis=1)
+            # 计算logits和标签之间的softmax交叉熵。（弃用的参数） logits 未缩放的log概率
+            losses = tf.nn.softmax_cross_entropy_with_logits_v2(
+                logits=self.logits1, labels=tf.stop_gradient(self.start_label))
+            losses2 = tf.nn.softmax_cross_entropy_with_logits_v2(
+                logits=self.logits2, labels=tf.stop_gradient(self.end_label))
+            # 求出loss
+            self.loss = tf.reduce_mean(losses + losses2)
+
+    '''
+    找到每个位置给定start_prob和end_prob的样本的最佳答案。这将调用find_best_answer_for_passage，因为示例中有多个段落
+    '''
+    def find_best_answer(self, sample, start_prob, end_prob, padded_p_len):
+        best_p_idx, best_span, best_score = None, None, 0
+        for p_idx, passage in enumerate(sample['passages']):
+            if p_idx >= self.max_p_num:
+                continue
+            passage_len = min(self.max_p_len, len(passage['passage_tokens']))
+            answer_span, score = self.find_best_answer_for_passage(
+                start_prob[p_idx * padded_p_len: (p_idx + 1) * padded_p_len],
+                end_prob[p_idx * padded_p_len: (p_idx + 1) * padded_p_len],
+                passage_len)
+            if score > best_score:
+                best_score = score
+                best_p_idx = p_idx
+                best_span = answer_span
+        if best_p_idx is None or best_span is None:
+            best_answer = ''
+        else:
+            best_answer = ''.join(
+                sample['passages'][best_p_idx]['passage_tokens'][best_span[0]: best_span[1] + 1])
+        return best_answer
+
+    '''
+    使用单个段落中的最大start_prob * end_prob查找最佳答案
+    '''
+    def find_best_answer_for_passage(self, start_probs, end_probs, passage_len=None):
+        if passage_len is None:
+            passage_len = len(start_probs)
+        else:
+            passage_len = min(len(start_probs), passage_len)
+        best_start, best_end, max_prob = -1, -1, 0
+        for start_idx in range(passage_len):
+            for ans_len in range(self.max_a_len):
+                end_idx = start_idx + ans_len
+                if end_idx >= passage_len:
+                    continue
+                prob = start_probs[start_idx] * end_probs[end_idx]
+                if prob > max_prob:
+                    best_start = start_idx
+                    best_end = end_idx
+                    max_prob = prob
+        return (best_start, best_end), max_prob
+
+    '''
+    存储模型
+    '''
+    def save(self, model_dir, model_prefix):
+
+        self.saver.save(self.sess, os.path.join(model_dir, model_prefix))
+        self.logger.info('Model saved in {}, with prefix {}.'.format(model_dir, model_prefix))
+
+    '''
+    将模型从model_prefix恢复为model_dir作为模型指示符
+    '''
+    def restore(self, model_dir, model_prefix):
+
+        self.saver.restore(self.sess, os.path.join(model_dir, model_prefix))
+        self.logger.info('Model restored from {}, with prefix {}'.format(model_dir, model_prefix))
+
+    '''
+    优化函数
+    '''
+    def _create_train_op(self):
+        opt_arg = self.config.get_default_params().opt_arg
+
+        if self.optim_type == 'adagrad':
+            self.optimizer = tf.train.AdagradOptimizer(
+                learning_rate=opt_arg['adagrad']['learning_rate'])
+        elif self.optim_type == 'adam':
+            self.optimizer = tf.train.AdamOptimizer(
+                learning_rate=opt_arg['adam']['learning_rate'],
+                beta1=opt_arg['adam']['beta1'],
+                beta2=opt_arg['adam']['beta2'],
+                epsilon=opt_arg['adam']['epsilon'])
+        elif self.optim_type == 'adadelta':
+            self.optimizer = tf.train.AdadeltaOptimizer(
+                learning_rate=opt_arg['adadelta']['learning_rate'],
+                rho=opt_arg['adadelta']['rho'],
+                epsilon=opt_arg['adadelta']['epsilon'])
+        elif self.optim_type == 'gd':
+            self.optimizer = tf.train.GradientDescentOptimizer(
+                learning_rate=opt_arg['gradientdescent']['learning_rate'])
+
+        else:
+            raise NotImplementedError('Unsupported optimizer: {}'.format(self.optim_type))
+
+        self.logger.info("applying optimize %s" % self.optim_type)
+        # 返回使用trainable = True创建的所有变量
+        trainable_vars = tf.trainable_variables()
+        if self.trainable:
+            # 削减梯度
+            tvars = tf.trainable_variables()
+            grads = tf.gradients(self.loss, tvars)
+            grads, _ = tf.clip_by_global_norm(grads, clip_norm=self.config.get_default_params().grad_clip)
+            grad_var_pairs = zip(grads, tvars)
+            # 最小化loss
+            self.train_op = self.optimizer.apply_gradients(grad_var_pairs, name='apply_grad')
+        else:
+            self.train_op = self.optimizer.minimize(self.loss)
+
+    '''
+    训练每个epoch
+    '''
+    def _train_epoch(self, train_batches):
+        total_num, total_loss = 0, 0
+        log_every_n_batch, n_batch_loss = 1000, 0
+        for bitx, batch in enumerate(train_batches, 1):
+            feed_dict = {self.p: batch['passage_token_ids'],
+                         self.q: batch['question_token_ids'],
+                         self.qh: batch['question_char_ids'],
+                         self.ph: batch['passage_char_ids'],
+                         self.start_label: batch['start_id'],
+                         self.end_label: batch['end_id'],
+                         }
+
+            try:
+                _, loss, global_step = self.sess.run([self.train_op, self.loss, self.global_step], feed_dict)
+                total_loss += loss * len(batch['raw_data'])
+                total_num += len(batch['raw_data'])
+                n_batch_loss += loss
+            except Exception as e:
+                continue
+
+            if log_every_n_batch > 0 and bitx % log_every_n_batch == 0:
+                self.logger.info('Average loss from batch {} to {} is {}'.format(
+                    bitx - log_every_n_batch + 1, bitx, n_batch_loss / log_every_n_batch))
+                n_batch_loss = 0
+        print("total_num", total_num)
+        return 1.0 * total_loss / total_num
+
+    '''
+    训练函数
+    '''
+    def train(self, data, epochs, batch_size, save_dir, save_prefix, evaluate=True):
+        pad_id = self.vocab.get_word_id(self.vocab.pad_token)
+        pad_char_id = self.vocab.get_char_id(self.vocab.pad_token)
+        max_rouge_l = 0
+        for epoch in range(1, epochs + 1):
+            self.logger.info('Training the model for epoch {}'.format(epoch))
+            train_batches = data.next_batch('train', batch_size, pad_id, pad_char_id, shuffle=True)
+            train_loss = self._train_epoch(train_batches)
+            self.logger.info('Average train loss for epoch {} is {}'.format(epoch, train_loss))
+
+            if evaluate:
+                self.logger.info('Evaluating the model after epoch {}'.format(epoch))
+                if data.dev_set is not None:
+                    eval_batches = data.next_batch('dev', batch_size, pad_id, pad_char_id, shuffle=False)
+                    eval_loss, bleu_rouge = self.evaluate(eval_batches)
+                    self.logger.info('Dev eval loss {}'.format(eval_loss))
+                    self.logger.info('Dev eval result: {}'.format(bleu_rouge))
+
+                    if bleu_rouge['Rouge-L'] > max_rouge_l:
+                        self.save(save_dir, save_prefix)
+                        max_rouge_l = bleu_rouge['Rouge-L']
+                else:
+                    self.logger.warning('No dev set is loaded for evaluation in the dataset!')
+            else:
+                self.save(save_dir, save_prefix + '_' + str(epoch))
+
+
+    def evaluate(self, eval_batches, result_dir=None, result_prefix=None, save_full_info=False):
+        pred_answers, ref_answers = [], []
+        total_loss, total_num = 0, 0
+        for b_itx, batch in enumerate(eval_batches):
+
+            feed_dict = {self.p: batch['passage_token_ids'],
+                         self.q: batch['question_token_ids'],
+                         self.qh: batch['question_char_ids'],
+                         self.ph: batch["passage_char_ids"],
+                         self.start_label: batch['start_id'],
+                         self.end_label: batch['end_id'],
+                         }
+
+            try:
+                start_probs, end_probs, loss = self.sess.run([self.logits1, self.logits2, self.loss], feed_dict)
+                total_loss += loss * len(batch['raw_data'])
+                total_num += len(batch['raw_data'])
+
+                padded_p_len = len(batch['passage_token_ids'][0])
+                for sample, start_prob, end_prob in zip(batch['raw_data'], start_probs, end_probs):
+
+                    best_answer = self.find_best_answer(sample, start_prob, end_prob, padded_p_len)
+                    if save_full_info:
+                        sample['pred_answers'] = [best_answer]
+                        pred_answers.append(sample)
+                    else:
+                        pred_answers.append({'question_id': sample['question_id'],
+                                             'question_type': sample['question_type'],
+                                             'answers': [best_answer],
+                                             'entity_answers': [[]],
+                                             'yesno_answers': []})
+                    if 'answers' in sample:
+                        ref_answers.append({'question_id': sample['question_id'],
+                                            'question_type': sample['question_type'],
+                                            'answers': sample['answers'],
+                                            'entity_answers': [[]],
+                                            'yesno_answers': []})
+
+            except:
+                continue
+
+        if result_dir is not None and result_prefix is not None:
+            result_file = os.path.join(result_dir, result_prefix + '.json')
+            with open(result_file, 'w') as fout:
+                for pred_answer in pred_answers:
+                    fout.write(json.dumps(pred_answer, ensure_ascii=False) + '\n')
+
+            self.logger.info('Saving {} results to {}'.format(result_prefix, result_file))
+
+        # 这个平均损失在测试集上是无效的，因为我们没有真正的start_id和end_id
+        ave_loss = 1.0 * total_loss / total_num
+        # 如果提供了参考答案，则计算bleu和rouge分数
+        if len(ref_answers) > 0:
+            pred_dict, ref_dict = {}, {}
+            for pred, ref in zip(pred_answers, ref_answers):
+                question_id = ref['question_id']
+                if len(ref['answers']) > 0:
+                    pred_dict[question_id] = normalize(pred['answers'])
+                    ref_dict[question_id] = normalize(ref['answers'])
+            bleu_rouge = compute_bleu_rouge(pred_dict, ref_dict)
+        else:
+            bleu_rouge = None
+        return ave_loss, bleu_rouge
 
 
 
