@@ -6,6 +6,7 @@
 import logging
 import os
 import pickle
+
 from pre_process import Propress
 from vocab import Vocab
 from config import Config
@@ -105,21 +106,21 @@ class Run():
 
         # print(vocab.get_char_size())
 
-        # brc_data = Propress(self.config.get_default_params().max_p_num,
-        #                     self.config.get_default_params().max_p_len,
-        #                     self.config.get_default_params().max_q_len,
-        #                     self.config.get_default_params().max_ch_len,
-        #                     train_files=self.train_files, dev_files=self.dev_files)
-        # logger.info('Converting text into ids...')
-        # brc_data.convert_to_ids(vocab)
+        brc_data = Propress(self.config.get_default_params().max_p_num,
+                            self.config.get_default_params().max_p_len,
+                            self.config.get_default_params().max_q_len,
+                            self.config.get_default_params().max_ch_len,
+                            train_files=self.dev_files, dev_files=self.dev_files)
+        logger.info('Converting text into ids...')
+        brc_data.convert_to_ids(vocab)
         logger.info('Initialize the model...')
         rc_model = Model(vocab, trainable=True)
         logger.info('Training the model...')
-        # rc_model.train(brc_data,
-        #                self.config.get_default_params().epochs,
-        #                self.config.get_default_params().batch_size,
-        #                save_dir=self.config.get_filepath().model_dir,
-        #                save_prefix=self.algo)
+        rc_model.train(brc_data,
+                       self.config.get_default_params().epoch,
+                       self.config.get_default_params().batch_size,
+                       save_dir=self.config.get_filepath().model_dir,
+                       save_prefix=self.algo)
         logger.info('====== Done with model training! ======')
 
     '''
@@ -144,16 +145,16 @@ class Run():
 
         logger.info('Restoring the model...')
         model = Model(vocab, trainable=False)
-        model.restore(self.config.get_default_params().model_dir, self.algo)
+        model.restore(self.config.get_filepath().model_dir, self.algo)
         logger.info('Evaluating the model on dev set...')
         dev_batches = dataloader.next_batch('dev',
                                             self.config.get_default_params().batch_size,
-                                            vocab.get_word_id(vocab.pad_token),
-                                            vocab.get_char_id(vocab.pad_token),
+                                            vocab.get_id_byword(vocab.pad_token),
+                                            vocab.get_id_bychar(vocab.pad_token),
                                             shuffle=False)
 
-        dev_loss, dev_bleu_rouge = model.evaluate(
-            dev_batches, result_dir=self.config.get_filepath().output_dir, result_prefix='dev.predicted')
+        dev_loss, dev_bleu_rouge, summ = model.evaluate(
+            dev_batches, 'dev', result_dir=self.config.get_filepath().output_dir, result_prefix='dev.predicted')
 
         logger.info('Loss on dev set: {}'.format(dev_loss))
         logger.info('Result on dev set: {}'.format(dev_bleu_rouge))
@@ -189,9 +190,7 @@ class Run():
                                              vocab.get_char_id(vocab.pad_token),
                                              shuffle=False)
 
-        model.evaluate(test_batches,
-                          result_dir=self.config.get_filepath().output_dir, result_prefix='test.predicted')
-
+        model.evaluate(test_batches, 'test', result_dir=self.config.get_filepath().output_dir, result_prefix='test.predicted')
 
     def run(self):
 
@@ -205,7 +204,7 @@ class Run():
         logger.addHandler(file_handler)
 
         # self.prepare()
-        self.train()
+        # self.train()
         # self.evaluate()
         # self.predict()
 

@@ -31,7 +31,6 @@ class Propress(object):
         # 获取名字为brc的记录器
         # logging.basicConfig(filename=self.df.get_filepath().log_file)
         self.logger = logging.getLogger("brc")
-        self.logger.setLevel(logging.DEBUG)
         # passage和question
         self.max_p_num = max_p_num
         self.max_p_len = max_p_len
@@ -69,42 +68,41 @@ class Propress(object):
         with open(filename, 'r', encoding='utf8') as file:
             # 只能使用一行行的读取方式，不然会报错
             for line in file.readlines():
-                # dic = np.array(json.loads(line))
-                # np.append(contents, dic)
-                dic = json.loads(line.strip())
+                sample = json.loads(line.strip())
                 # 是否为训练文件
                 if train:
                     # 不存在answer段落
-                    if len(dic['answer_spans']) == 0:
+                    if len(sample['answer_spans']) == 0:
                         continue
                     # 答案的长度大于我们设定的最大的passage的长度，这种也跳过
-                    if dic['answer_spans'][0][1] >= self.max_p_len:
+                    if sample['answer_spans'][0][1] >= self.max_p_len:
                         continue
 
                 # 把里面的answer_docs选取出来，answer_docs放的是answer中真正的答案，也就是fake_answers的内容
                 # 这个值是一个int
-                if 'answer_docs' in dic:
-                    dic['answer_passages'] = dic['answer_docs']
+                if 'answer_docs' in sample:
+                    sample['answer_passages'] = sample['answer_docs']
 
                 # question_chars = [list(token) for token in dic['question_tokens']]
                 # dic['question_chars'] = question_chars
 
                 # 获取切分好的问句
-                question_tokens = dic['segmented_question']
-                dic['question_tokens'] = question_tokens
-                dic['question_chars'] = [list(token) for token in question_tokens]
+                question_tokens = sample['segmented_question']
+                sample['question_tokens'] = question_tokens
+                question_chars = [list(token) for token in question_tokens]
+                sample['question_chars'] = question_chars
 
-                for char in dic['question_chars']:
+                for char in sample['question_chars']:
                     if len(char) > max_char_num:
                         max_char_num = len(char)
                         max_char_list = char
 
                 # 设置文档
-                dic['passages'] = []
+                sample['passages'] = []
 
                 # 获取documents中的数据
                 # 这个是一个集合的迭代器，前面是id，后面是document的内容
-                for doc_idx, doc in enumerate(dic['documents']):
+                for doc_idx, doc in enumerate(sample['documents']):
                     # 进行训练
                     if train:
                         # 这个数据集很好的为我们找到了在para中与问题最相近的答案，减少了我们去考虑过多的para内容
@@ -121,7 +119,7 @@ class Propress(object):
                                 max_char_num = len(char)
                                 max_char_list = char
 
-                        dic['passages'].append({
+                        sample['passages'].append({
                             'passage_tokens': passage_tokens,  # 选取了分词好的最相关段落，一段
                             'is_selected': doc['is_selected'],  # 是否被选取
                             'passage_chars': passage_chars
@@ -133,7 +131,7 @@ class Propress(object):
                         for para_tokens in doc['segmented_paragraphs']:
                             para_tokens = para_tokens
                             # 获取分词的问题
-                            question_tokens = dic['segmented_question']
+                            question_tokens = sample['segmented_question']
                             # 先计数para_tokens，然后计数question_tokens，最后统计两个dict的交集
                             # 也就是获取段落tokens和问题tokens这两个中相同的tokens
                             common_with_question = Counter(para_tokens) & Counter(question_tokens)
@@ -152,12 +150,11 @@ class Propress(object):
                         fake_passage_tokens = []
                         for para_info in para_infos[:1]:
                             fake_passage_tokens += para_info[0]
-                        dic['passages'].append({'passage_tokens': fake_passage_tokens,
-                                                'passage_chars': [list(token) for token in fake_passage_tokens]
-                                                })
 
-                contents.append(dic)
-            # print(contents[0])
+                        sample['passages'].append({'passage_tokens': fake_passage_tokens,
+                                                   'passage_chars': [list(token) for token in fake_passage_tokens]})
+
+                contents.append(sample)
 
             return contents
 
@@ -171,10 +168,8 @@ class Propress(object):
         batch_data = {'raw_data': [data[i] for i in indices],
                       'question_token_ids': [],
                       'question_char_ids': [],
-                      'question_length': [],
                       'passage_token_ids': [],
                       'passage_char_ids': [],
-                      'passage_length': [],
                       'start_id': [],
                       'end_id': []}
         # passages数组的长度，passages是之前处理完的数据，里面是存放的选择出来的passage（分词完的）
@@ -190,19 +185,16 @@ class Propress(object):
                     # data 数据里面有question_tokens_ids
                     batch_data['question_token_ids'].append(sample['question_token_ids'])
                     batch_data['question_char_ids'].append(sample['question_char_ids'])
-                    batch_data['question_length'].append(len(sample['question_token_ids']))
                     passage_token_ids = sample['passages'][pidx]['passage_token_ids']
                     passage_char_ids = sample['passages'][pidx]['passage_char_ids']
                     batch_data['passage_token_ids'].append(passage_token_ids)
-                    batch_data['passage_length'].append(min(len(passage_token_ids), self.max_p_len))
                     batch_data['passage_char_ids'].append(passage_char_ids)
                 else:
                     batch_data['question_token_ids'].append([])
-                    batch_data['question_length'].append(0)
                     batch_data['question_char_ids'].append([[]])
                     batch_data['passage_token_ids'].append([])
-                    batch_data['passage_length'].append(0)
                     batch_data['passage_char_ids'].append([[]])
+
         # 填充完的数据
         batch_data, padded_p_len, padded_q_len = self._dynamic_padding(batch_data, pad_id, pad_char_id)
         for sample in batch_data['raw_data']:
@@ -225,8 +217,9 @@ class Propress(object):
     '''
     def _dynamic_padding(self, batch_data, pad_id, pad_char_id):
         pad_char_len = self.max_char_len
-        pad_p_len = min(self.max_p_len, max(batch_data['passage_length']))
-        pad_q_len = min(self.max_q_len, max(batch_data['question_length']))
+        pad_p_len = self.max_p_len  # min(self.max_p_len, max(batch_data['passage_length']))
+        pad_q_len = self.max_q_len  # min(self.max_q_len, max(batch_data['question_length']))
+
         batch_data['passage_token_ids'] = [(ids + [pad_id] * (pad_p_len - len(ids)))[: pad_p_len]
                                            for ids in batch_data['passage_token_ids']]
 

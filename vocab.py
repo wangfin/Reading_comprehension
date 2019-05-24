@@ -258,6 +258,7 @@ class Vocab(object):
         vec = [self.get_id_byword(label) for label in tokens]
         return vec
 
+    # 将char转换成id
     def convert_char_to_ids(self, tokens):
         vec = []
         for token in tokens:

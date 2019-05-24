@@ -19,6 +19,7 @@ class cudnn_gru:
         self.grus = []
         self.inits = []
         self.dropout_mask = []
+        self.scope = scope
         for layer in range(num_layers):
             # 第一层500，后两层 2*75
             input_size_ = input_size if layer == 0 else 2 * num_units
@@ -38,28 +39,27 @@ class cudnn_gru:
             self.inits.append((init_fw, init_bw, ))
             self.dropout_mask.append((mask_fw, mask_bw, ))
 
-        # print(self.grus)
-        # print(self.inits)
-        # print(self.dropout_mask)
-
     # 实现了call方法，可以像函数一样调用他 如 a=A() a()
     def __call__(self, inputs, seq_len, keep_prob=1.0, is_train=None, concat_layers=True):
         outputs = [tf.transpose(inputs, [1, 0, 2])]
-        # print(outputs[-1])
+        # 这一步是将数据的第二维和第一维对调，从维度上看就是第二维和第一维对换
         for layer in range(self.num_layers):
             gru_fw, gru_bw = self.grus[layer]
             init_fw, init_bw = self.inits[layer]
             mask_fw, mask_bw = self.dropout_mask[layer]
-            with tf.variable_scope("fw_{}".format(layer)):
+            with tf.variable_scope("fw_{}".format(self.scope + str(layer))):
+                # outputs[-1] * mask_fw shape [1, 320, 500]
                 out_fw, _ = gru_fw(
                     outputs[-1] * mask_fw, initial_state=(init_fw, ))
-            with tf.variable_scope("bw_{}".format(layer)):
+            with tf.variable_scope("bw_{}".format(self.scope + str(layer))):
+                # 反转可变长度切片
                 inputs_bw = tf.reverse_sequence(
                     outputs[-1] * mask_bw, seq_lengths=seq_len, seq_dim=0, batch_dim=1)
                 out_bw, _ = gru_bw(inputs_bw, initial_state=(init_bw, ))
                 out_bw = tf.reverse_sequence(
                     out_bw, seq_lengths=seq_len, seq_dim=0, batch_dim=1)
             outputs.append(tf.concat([out_fw, out_bw], axis=2))
+            # print('outputs' + str(layer) + str(tf.shape(outputs)))
         if concat_layers:
             res = tf.concat(outputs[1:], axis=2)
         else:
@@ -131,11 +131,13 @@ class ptr_net:
 
     def __call__(self, init, match, d, mask):
         with tf.variable_scope(self.scope):
+            # 输入的match，先进行Dropout
             d_match = dropout(match, keep_prob=self.keep_prob,
                               is_train=self.is_train)
             inp, logits1 = pointer(d_match, init * self.dropout_mask, d, mask)
             d_inp = dropout(inp, keep_prob=self.keep_prob,
                             is_train=self.is_train)
+            # 从给定的init状态开始运行此GRU单元
             _, state = self.gru(d_inp, init)
             tf.get_variable_scope().reuse_variables()
             _, logits2 = pointer(d_match, state * self.dropout_mask, d, mask)
@@ -147,13 +149,30 @@ def pointer(inputs, state, hidden, mask, scope="pointer"):
         # expand_dims 在第一维插入一维
         u = tf.concat([tf.tile(tf.expand_dims(state, axis=1),
                                [1, tf.shape(inputs)[1], 1]), inputs], axis=2)
-        s0 = tf.nn.tanh(dense(u, hidden, use_bias=False, scope="s0"))
-        s = dense(s0, 1, use_bias=False, scope="s")
+        s0 = tf.nn.tanh(dense(u, hidden, use_bias=False, scope="pointer_s0"))
+        s = dense(s0, 1, use_bias=False, scope="pointer_s")
         # 计算概率
+        # squeeze删除1的维度，也就是删除了s中的第三维
         s1 = softmax_mask(tf.squeeze(s, [2]), mask)
+        # 补全第三维
         a = tf.expand_dims(tf.nn.softmax(s1), axis=2)
+        # 按第一维求和，a*inputs的shape为[320, 400, 150]
         res = tf.reduce_sum(a * inputs, axis=1)
         return res, s1
+
+# 求和，这个应该是attention-pooling
+def summ(memory, hidden, mask, keep_prob=1.0, is_train=None, scope="summ"):
+    with tf.variable_scope(scope):
+        # drop层
+        d_memory = dropout(memory, keep_prob=keep_prob, is_train=is_train)
+        s0 = tf.nn.tanh(dense(d_memory, hidden, scope="att_pool_s0"))
+        s = dense(s0, 1, use_bias=False, scope="att_pool_s")
+        # squeeze删除s里面 第0个到第3个里面的1
+        s1 = softmax_mask(tf.squeeze(s, [2]), mask)
+        a = tf.expand_dims(tf.nn.softmax(s1), axis=2)
+        # 这里是论文中的rQ
+        res = tf.reduce_sum(a * memory, axis=1)
+        return res
 
 # dropout层
 def dropout(args, keep_prob, is_train, mode="recurrent"):
@@ -193,6 +212,7 @@ def softmax_mask(val, mask):
 对于第二种情况，在机器翻译任务中，我们在获取输出序列中某一个词语的向量表达时，通常假设该词语的后续词语是未知的，即仅根据已有的信息计算词向量。
 因此在采用self-attention机制计算词语的权重向量时，我们应将目标词语的后续词语所对应的权重置为0。
 '''
+
 # 点注意力
 def dot_attention(inputs, memory, mask, hidden, keep_prob=1.0, is_train=None, scope="dot_attention"):
     with tf.variable_scope(scope):
@@ -220,8 +240,10 @@ def dot_attention(inputs, memory, mask, hidden, keep_prob=1.0, is_train=None, sc
             # softmax = tf.exp(outputs) / tf.reduce_sum(tf.exp(outputs), mask)
             # 将在mask维度，对outputs进行softmax
             logits = tf.nn.softmax(softmax_mask(outputs, mask))
+            # 这里的outputs也就是attention了
             outputs = tf.matmul(logits, memory)
-            # 连接inputs，outputs
+            # 连接inputs，outputs，在第三维
+            # 这里就是论文中的[up,ct]
             res = tf.concat([inputs, outputs], axis=2)
 
         # 门控单元，用于进一步的把控输入
@@ -244,7 +266,7 @@ def dense(inputs, hidden, use_bias=True, scope="dense"):
         # hidden是一维的数字，表示了隐藏单元的数量
         out_shape = [shape[idx] for idx in range(
             len(inputs.get_shape().as_list()) - 1)] + [hidden]
-        # 这个inputs和原来的inputs一样
+        # 这个inputs把原来的input前两维组合在一起
         flat_inputs = tf.reshape(inputs, [-1, dim])
         # 创建W
         W = tf.get_variable("W", [dim, hidden])
@@ -254,25 +276,12 @@ def dense(inputs, hidden, use_bias=True, scope="dense"):
                 "b", [hidden], initializer=tf.constant_initializer(0.))
             res = tf.nn.bias_add(res, b)
         res = tf.reshape(res, out_shape)
-        # res的shape是inputs的少1维
-        return res
-
-#
-def summ(memory, hidden, mask, keep_prob=1.0, is_train=None, scope="summ"):
-    with tf.variable_scope(scope):
-        # drop层
-        d_memory = dropout(memory, keep_prob=keep_prob, is_train=is_train)
-        s0 = tf.nn.tanh(dense(d_memory, hidden, scope="s0"))
-        s = dense(s0, 1, use_bias=False, scope="s")
-        # squeeze删除s里面 第0个到第3个里面的1
-        s1 = softmax_mask(tf.squeeze(s, [2]), mask)
-        a = tf.expand_dims(tf.nn.softmax(s1), axis=2)
-        res = tf.reduce_sum(a * memory, axis=1)
+        # res的shape是inputs的最后一维换成hidden
         return res
 
 if __name__ == '__main__':
     # args1 = [[[1, 2], [3, 4]], [[5, 6], [7, 8]]]
-    args1 = [[1, 2], [3, 4]]
+    args1 = [[1, 2, 3], [3, 4, 5]]
     args1 = tf.cast(args1, tf.float32)
     args2 = 75 #[[9, 10], [11, 12]]
     # args2 = [[[9, 10], [11, 12]], [[13, 14], [15, 16]]]

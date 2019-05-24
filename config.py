@@ -85,28 +85,32 @@ class Config:
             # 词典长度
             vocab_size=1285531,
             # dropout
-            keep_prob=0.2,
+            keep_prob=0.5,
             # ptr_dropout
-            ptr_keep_prob=0.7,
+            ptr_keep_prob=0.5,
             # hidden size
-            hidden_size=75,
+            hidden_size=48,
             # char hidden
-            char_hidden=100,
+            char_hidden=48,
             # attention size
-            attn_size=75,
+            attn_size=48,
             # batch size
-            batch_size=64,
+            batch_size=8,
             # epoch
-            epoch=100,
+            epoch=10,
             # 优化函数
             opt_arg={'adadelta': {'learning_rate': 1, 'rho': 0.95, 'epsilon': 1e-6},
                      'adam': {'learning_rate': 1e-3, 'beta1': 0.9, 'beta2': 0.999, 'epsilon': 1e-8},
                      'gradientdescent': {'learning_rate': 1},
                      'adagrad': {'learning_rate': 1}},
+            # adadelta init lr
+            init_lr=0.5,
             # 是否使用 cudnn
             use_cudnn=True,
             # 全局梯度削减速率
-            grad_clip=5.0
+            grad_clip=5.0,
+            # 批量保存loss的大小
+            period=10
         )
 
 
