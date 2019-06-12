@@ -1905,3 +1905,627 @@
 2019-05-22 13:48:40,050 - brc - INFO - Average loss from batch 101 to 200 is 58.0086350440979
 2019-05-22 13:49:41,023 - brc - INFO - Average loss from batch 201 to 300 is 58.50449798583984
 2019-05-22 13:50:42,041 - brc - INFO - Average loss from batch 301 to 400 is 59.12199230194092
+2019-05-24 20:41:32,629 - brc - INFO - ====== training ======
+2019-05-24 20:41:32,629 - brc - INFO - Load data_set and vocab...
+2019-05-24 20:41:46,538 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 20:41:53,761 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 20:41:53,761 - brc - INFO - Converting text into ids...
+2019-05-24 20:42:07,207 - brc - INFO - Initialize the model...
+2019-05-24 20:43:52,288 - brc - INFO - ====== training ======
+2019-05-24 20:43:52,288 - brc - INFO - Load data_set and vocab...
+2019-05-24 20:43:58,569 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 20:44:05,839 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 20:44:05,839 - brc - INFO - Converting text into ids...
+2019-05-24 20:44:20,528 - brc - INFO - Initialize the model...
+2019-05-24 20:44:30,497 - brc - INFO - Time to build graph: 9.28964352607727 s
+2019-05-24 20:44:53,163 - brc - INFO - Training the model...
+2019-05-24 20:48:46,182 - brc - INFO - ====== training ======
+2019-05-24 20:48:46,182 - brc - INFO - Load data_set and vocab...
+2019-05-24 20:48:52,284 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 20:48:59,617 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 20:48:59,617 - brc - INFO - Converting text into ids...
+2019-05-24 20:49:13,244 - brc - INFO - Initialize the model...
+2019-05-24 20:49:19,929 - brc - INFO - Time to build graph: 6.031871557235718 s
+2019-05-24 20:49:30,884 - brc - INFO - Training the model...
+2019-05-24 20:49:49,764 - brc - INFO - Training the model for epoch 1
+2019-05-24 20:50:53,906 - brc - INFO - Average loss from batch 1 to 100 is 91.84775756835937
+2019-05-24 20:51:46,611 - brc - INFO - Average loss from batch 101 to 200 is 79.393247756958
+2019-05-24 20:52:39,305 - brc - INFO - Average loss from batch 201 to 300 is 75.67795997619629
+2019-05-24 20:53:35,870 - brc - INFO - Average loss from batch 301 to 400 is 72.95977146148681
+2019-05-24 20:54:32,433 - brc - INFO - Average loss from batch 401 to 500 is 70.72258472442627
+2019-05-24 20:54:57,373 - brc - INFO - Average train loss for epoch 1 is 77.06214604658238
+2019-05-24 20:54:57,683 - brc - INFO - Evaluating the model after epoch 1
+2019-05-24 21:15:16,700 - brc - INFO - ====== training ======
+2019-05-24 21:15:16,700 - brc - INFO - Load data_set and vocab...
+2019-05-24 21:15:22,960 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 21:15:30,397 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 21:15:30,397 - brc - INFO - Converting text into ids...
+2019-05-24 21:15:44,261 - brc - INFO - Initialize the model...
+2019-05-24 21:15:50,884 - brc - INFO - Time to build graph: 5.972034215927124 s
+2019-05-24 21:16:01,616 - brc - INFO - Training the model...
+2019-05-24 21:16:18,628 - brc - INFO - Training the model for epoch 1
+2019-05-24 21:17:26,879 - brc - INFO - ====== training ======
+2019-05-24 21:17:26,879 - brc - INFO - Load data_set and vocab...
+2019-05-24 21:17:33,029 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 21:17:40,378 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 21:17:40,378 - brc - INFO - Converting text into ids...
+2019-05-24 21:17:53,990 - brc - INFO - Initialize the model...
+2019-05-24 21:18:00,680 - brc - INFO - Time to build graph: 6.034865379333496 s
+2019-05-24 21:18:11,342 - brc - INFO - Training the model...
+2019-05-24 21:18:29,542 - brc - INFO - Training the model for epoch 1
+2019-05-24 21:19:32,985 - brc - INFO - Average loss from batch 1 to 100 is 89.7864567565918
+2019-05-24 21:20:26,973 - brc - INFO - Average loss from batch 101 to 200 is 79.52004005432129
+2019-05-24 21:21:20,711 - brc - INFO - Average loss from batch 201 to 300 is 75.39159839630128
+2019-05-24 21:22:18,024 - brc - INFO - Average loss from batch 301 to 400 is 72.70015140533447
+2019-05-24 21:23:15,831 - brc - INFO - Average loss from batch 401 to 500 is 68.6886754989624
+2019-05-24 21:23:40,940 - brc - INFO - Average train loss for epoch 1 is 76.64767724626205
+2019-05-24 21:23:41,019 - brc - INFO - Evaluating the model after epoch 1
+2019-05-24 21:33:34,089 - brc - INFO - ====== training ======
+2019-05-24 21:33:34,089 - brc - INFO - Load data_set and vocab...
+2019-05-24 21:33:40,165 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 21:33:47,517 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 21:33:47,517 - brc - INFO - Converting text into ids...
+2019-05-24 21:34:01,098 - brc - INFO - Initialize the model...
+2019-05-24 21:34:07,614 - brc - INFO - Time to build graph: 5.8673131465911865 s
+2019-05-24 21:34:18,138 - brc - INFO - Training the model...
+2019-05-24 21:34:35,234 - brc - INFO - Training the model for epoch 1
+2019-05-24 21:52:09,665 - brc - INFO - ====== training ======
+2019-05-24 21:52:09,665 - brc - INFO - Load data_set and vocab...
+2019-05-24 21:52:15,798 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 21:52:23,169 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 21:52:23,170 - brc - INFO - Converting text into ids...
+2019-05-24 21:52:36,996 - brc - INFO - Initialize the model...
+2019-05-24 21:52:43,610 - brc - INFO - Time to build graph: 5.955078840255737 s
+2019-05-24 21:52:54,266 - brc - INFO - Training the model...
+2019-05-24 21:53:13,401 - brc - INFO - Training the model for epoch 1
+2019-05-24 21:54:09,941 - brc - INFO - ====== training ======
+2019-05-24 21:54:09,941 - brc - INFO - Load data_set and vocab...
+2019-05-24 21:54:16,114 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 21:54:23,414 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 21:54:23,414 - brc - INFO - Converting text into ids...
+2019-05-24 21:54:37,054 - brc - INFO - Initialize the model...
+2019-05-24 21:54:44,135 - brc - INFO - Time to build graph: 6.430110692977905 s
+2019-05-24 21:54:54,612 - brc - INFO - Training the model...
+2019-05-24 21:55:13,082 - brc - INFO - Training the model for epoch 1
+2019-05-24 21:56:00,660 - brc - INFO - ====== training ======
+2019-05-24 21:56:00,660 - brc - INFO - Load data_set and vocab...
+2019-05-24 21:56:06,929 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 21:56:14,427 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 21:56:14,427 - brc - INFO - Converting text into ids...
+2019-05-24 21:57:17,300 - brc - INFO - ====== training ======
+2019-05-24 21:57:17,300 - brc - INFO - Load data_set and vocab...
+2019-05-24 21:57:23,394 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 21:57:30,704 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 21:57:30,704 - brc - INFO - Converting text into ids...
+2019-05-24 21:57:44,409 - brc - INFO - Initialize the model...
+2019-05-24 21:57:50,992 - brc - INFO - Time to build graph: 5.932142734527588 s
+2019-05-24 21:58:01,471 - brc - INFO - Training the model...
+2019-05-24 21:58:19,319 - brc - INFO - Training the model for epoch 1
+2019-05-24 21:59:47,001 - brc - INFO - ====== training ======
+2019-05-24 21:59:47,001 - brc - INFO - Load data_set and vocab...
+2019-05-24 22:00:36,766 - brc - INFO - ====== training ======
+2019-05-24 22:00:36,766 - brc - INFO - Load data_set and vocab...
+2019-05-24 22:00:42,882 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 22:00:50,238 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 22:00:50,238 - brc - INFO - Converting text into ids...
+2019-05-24 22:01:03,881 - brc - INFO - Initialize the model...
+2019-05-24 22:01:10,508 - brc - INFO - Time to build graph: 5.984967231750488 s
+2019-05-24 22:01:21,188 - brc - INFO - Training the model...
+2019-05-24 22:01:38,863 - brc - INFO - Training the model for epoch 1
+2019-05-24 22:02:39,502 - brc - INFO - Average loss from batch 1 to 100 is 91.3790548324585
+2019-05-24 22:03:32,548 - brc - INFO - Average loss from batch 101 to 200 is 79.67282234191894
+2019-05-24 22:04:25,449 - brc - INFO - Average loss from batch 201 to 300 is 75.36171844482422
+2019-05-24 22:05:21,663 - brc - INFO - Average loss from batch 301 to 400 is 69.43757858276368
+2019-05-24 22:06:18,388 - brc - INFO - Average loss from batch 401 to 500 is 69.5612886428833
+2019-05-24 22:06:43,406 - brc - INFO - Average train loss for epoch 1 is 76.10816029941334
+2019-05-24 22:06:43,406 - brc - INFO - Evaluating the model after epoch 1
+2019-05-24 22:12:17,762 - brc - INFO - ====== training ======
+2019-05-24 22:12:17,762 - brc - INFO - Load data_set and vocab...
+2019-05-24 22:12:23,903 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 22:12:31,209 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 22:12:31,209 - brc - INFO - Converting text into ids...
+2019-05-24 22:12:44,832 - brc - INFO - Initialize the model...
+2019-05-24 22:12:51,358 - brc - INFO - Time to build graph: 5.878281593322754 s
+2019-05-24 22:13:01,808 - brc - INFO - Training the model...
+2019-05-24 22:13:18,484 - brc - INFO - Training the model for epoch 1
+2019-05-24 22:14:17,458 - brc - INFO - Average loss from batch 1 to 100 is 90.63739784240722
+2019-05-24 22:15:10,524 - brc - INFO - Average loss from batch 101 to 200 is 81.40492374420165
+2019-05-24 22:16:03,890 - brc - INFO - Average loss from batch 201 to 300 is 74.39252662658691
+2019-05-24 22:17:00,446 - brc - INFO - Average loss from batch 301 to 400 is 68.82763832092286
+2019-05-24 22:17:57,108 - brc - INFO - Average loss from batch 401 to 500 is 68.20688331604003
+2019-05-24 22:18:22,287 - brc - INFO - Average train loss for epoch 1 is 76.2360856813543
+2019-05-24 22:18:22,287 - brc - INFO - Evaluating the model after epoch 1
+2019-05-24 22:20:05,112 - brc - INFO - ====== training ======
+2019-05-24 22:20:05,112 - brc - INFO - Load data_set and vocab...
+2019-05-24 22:20:11,285 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 22:20:18,621 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 22:20:18,621 - brc - INFO - Converting text into ids...
+2019-05-24 22:20:32,322 - brc - INFO - Initialize the model...
+2019-05-24 22:20:38,887 - brc - INFO - Time to build graph: 5.916211843490601 s
+2019-05-24 22:20:49,454 - brc - INFO - Training the model...
+2019-05-24 22:21:07,532 - brc - INFO - Training the model for epoch 1
+2019-05-24 22:22:06,801 - brc - INFO - Average loss from batch 1 to 100 is 89.58734420776368
+2019-05-24 22:23:00,638 - brc - INFO - Average loss from batch 101 to 200 is 77.61068408966065
+2019-05-24 22:23:57,047 - brc - INFO - Average loss from batch 201 to 300 is 76.72745853424072
+2019-05-24 22:24:53,814 - brc - INFO - Average loss from batch 301 to 400 is 73.43196773529053
+2019-05-24 22:25:50,648 - brc - INFO - Average loss from batch 401 to 500 is 71.29791381835938
+2019-05-24 22:26:15,624 - brc - INFO - Average train loss for epoch 1 is 76.94655413487378
+2019-05-24 22:26:15,624 - brc - INFO - Evaluating the model after epoch 1
+2019-05-24 22:31:17,140 - brc - INFO - ====== training ======
+2019-05-24 22:31:17,140 - brc - INFO - Load data_set and vocab...
+2019-05-24 22:31:23,280 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 22:31:30,627 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 22:31:30,628 - brc - INFO - Converting text into ids...
+2019-05-24 22:31:44,301 - brc - INFO - Initialize the model...
+2019-05-24 22:31:50,946 - brc - INFO - Time to build graph: 5.994972229003906 s
+2019-05-24 22:32:01,681 - brc - INFO - Training the model...
+2019-05-24 22:32:20,511 - brc - INFO - Training the model for epoch 1
+2019-05-24 22:33:20,078 - brc - INFO - Average loss from batch 1 to 100 is 89.214609375
+2019-05-24 22:34:13,112 - brc - INFO - Average loss from batch 101 to 200 is 80.99761745452881
+2019-05-24 22:34:48,672 - brc - INFO - ====== training ======
+2019-05-24 22:34:48,672 - brc - INFO - Load data_set and vocab...
+2019-05-24 22:34:54,914 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 22:35:02,401 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 22:35:02,401 - brc - INFO - Converting text into ids...
+2019-05-24 22:35:16,314 - brc - INFO - Initialize the model...
+2019-05-24 22:35:22,989 - brc - INFO - Time to build graph: 6.030875205993652 s
+2019-05-24 22:35:33,522 - brc - INFO - Training the model...
+2019-05-24 22:35:51,765 - brc - INFO - Training the model for epoch 1
+2019-05-24 22:36:54,667 - brc - INFO - Average loss from batch 1 to 100 is 88.31726516723633
+2019-05-24 22:37:51,008 - brc - INFO - Average loss from batch 101 to 200 is 79.13310123443604
+2019-05-24 22:38:47,821 - brc - INFO - Average loss from batch 201 to 300 is 76.19953315734864
+2019-05-24 22:39:44,344 - brc - INFO - Average loss from batch 301 to 400 is 74.81983890533448
+2019-05-24 22:40:40,735 - brc - INFO - Average loss from batch 401 to 500 is 69.7086234664917
+2019-05-24 22:41:05,900 - brc - INFO - Average train loss for epoch 1 is 76.94984674453735
+2019-05-24 22:41:05,900 - brc - INFO - Evaluating the model after epoch 1
+2019-05-24 22:42:32,207 - brc - INFO - ====== training ======
+2019-05-24 22:42:32,207 - brc - INFO - Load data_set and vocab...
+2019-05-24 22:42:38,294 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 22:42:45,632 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 22:42:45,632 - brc - INFO - Converting text into ids...
+2019-05-24 22:42:59,220 - brc - INFO - Initialize the model...
+2019-05-24 22:43:05,765 - brc - INFO - Time to build graph: 5.885265111923218 s
+2019-05-24 22:43:16,191 - brc - INFO - Training the model...
+2019-05-24 22:43:33,932 - brc - INFO - Training the model for epoch 1
+2019-05-24 22:46:43,539 - brc - INFO - ====== training ======
+2019-05-24 22:46:43,539 - brc - INFO - Load data_set and vocab...
+2019-05-24 22:46:49,626 - brc - INFO - Train set size: 4353 questions.
+2019-05-24 22:46:56,961 - brc - INFO - Dev set size: 5000 questions.
+2019-05-24 22:46:56,961 - brc - INFO - Converting text into ids...
+2019-05-24 22:47:10,505 - brc - INFO - Initialize the model...
+2019-05-24 22:47:17,039 - brc - INFO - Time to build graph: 5.8832714557647705 s
+2019-05-24 22:47:27,434 - brc - INFO - Training the model...
+2019-05-24 22:47:44,871 - brc - INFO - Training the model for epoch 1
+2019-05-24 22:48:43,788 - brc - INFO - Average loss from batch 1 to 100 is 89.45936073303223
+2019-05-24 22:49:36,892 - brc - INFO - Average loss from batch 101 to 200 is 82.62249454498291
+2019-05-24 22:50:31,705 - brc - INFO - Average loss from batch 201 to 300 is 76.03805568695068
+2019-05-24 22:51:28,294 - brc - INFO - Average loss from batch 301 to 400 is 73.3659663772583
+2019-05-24 22:52:24,839 - brc - INFO - Average loss from batch 401 to 500 is 74.01192279815673
+2019-05-24 22:52:49,988 - brc - INFO - Average train loss for epoch 1 is 78.19109617962556
+2019-05-24 22:52:49,988 - brc - INFO - Evaluating the model after epoch 1
+2019-05-24 22:57:19,049 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-24 22:57:19,049 - brc - INFO - Dev eval result: {'Bleu-1': 4.694958243215299e-12, 'Bleu-2': 3.853480858684745e-12, 'Bleu-3': 3.2531511793034277e-12, 'Bleu-4': 2.867806232036346e-12, 'Rouge-L': 0.02025723515477632}
+2019-05-24 22:57:31,906 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-24 22:57:32,623 - brc - INFO - Training the model for epoch 2
+2019-05-24 22:58:29,402 - brc - INFO - Average loss from batch 1 to 100 is 69.73952739715577
+2019-05-24 22:59:25,686 - brc - INFO - Average loss from batch 101 to 200 is 67.29088306427002
+2019-05-24 23:00:22,562 - brc - INFO - Average loss from batch 201 to 300 is 69.0642639541626
+2019-05-24 23:01:19,323 - brc - INFO - Average loss from batch 301 to 400 is 65.87214485168457
+2019-05-24 23:02:15,902 - brc - INFO - Average loss from batch 401 to 500 is 66.8572566986084
+2019-05-24 23:02:40,653 - brc - INFO - Average train loss for epoch 2 is 67.41421078934388
+2019-05-24 23:02:40,653 - brc - INFO - Evaluating the model after epoch 2
+2019-05-24 23:07:10,920 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-24 23:07:10,920 - brc - INFO - Dev eval result: {'Bleu-1': 5.871753424681885e-14, 'Bleu-2': 4.607336356218735e-14, 'Bleu-3': 3.9309775032014545e-14, 'Bleu-4': 3.4706428122416556e-14, 'Rouge-L': 0.02558330811994837}
+2019-05-24 23:07:24,756 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-24 23:07:25,485 - brc - INFO - Training the model for epoch 3
+2019-05-24 23:08:22,069 - brc - INFO - Average loss from batch 1 to 100 is 67.03781158447265
+2019-05-24 23:09:18,646 - brc - INFO - Average loss from batch 101 to 200 is 66.04587898254394
+2019-05-24 23:10:15,083 - brc - INFO - Average loss from batch 201 to 300 is 64.51821701049805
+2019-05-24 23:11:11,588 - brc - INFO - Average loss from batch 301 to 400 is 65.57768283843994
+2019-05-24 23:12:08,252 - brc - INFO - Average loss from batch 401 to 500 is 63.02623168945313
+2019-05-24 23:12:33,338 - brc - INFO - Average train loss for epoch 3 is 65.0860268719056
+2019-05-24 23:12:33,338 - brc - INFO - Evaluating the model after epoch 3
+2019-05-24 23:17:07,201 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-24 23:17:07,201 - brc - INFO - Dev eval result: {'Bleu-1': 0.00439390576456891, 'Bleu-2': 0.0030158012784098237, 'Bleu-3': 0.0023904816100109466, 'Bleu-4': 0.0020503903583401666, 'Rouge-L': 0.056703771306887134}
+2019-05-24 23:17:21,656 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-24 23:17:22,349 - brc - INFO - Training the model for epoch 4
+2019-05-24 23:18:18,749 - brc - INFO - Average loss from batch 1 to 100 is 65.60736236572265
+2019-05-24 23:19:15,272 - brc - INFO - Average loss from batch 101 to 200 is 64.856280708313
+2019-05-24 23:20:11,726 - brc - INFO - Average loss from batch 201 to 300 is 63.608215522766116
+2019-05-24 23:21:08,260 - brc - INFO - Average loss from batch 301 to 400 is 62.94568042755127
+2019-05-24 23:22:04,537 - brc - INFO - Average loss from batch 401 to 500 is 63.37747207641601
+2019-05-24 23:22:30,079 - brc - INFO - Average train loss for epoch 4 is 63.770010471343994
+2019-05-24 23:22:30,079 - brc - INFO - Evaluating the model after epoch 4
+2019-05-24 23:27:04,866 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-24 23:27:04,866 - brc - INFO - Dev eval result: {'Bleu-1': 0.022947714393138443, 'Bleu-2': 0.015798563033008552, 'Bleu-3': 0.012582238274814386, 'Bleu-4': 0.010839797868914964, 'Rouge-L': 0.09203727909738167}
+2019-05-24 23:27:16,145 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-24 23:27:16,848 - brc - INFO - Training the model for epoch 5
+2019-05-24 23:28:13,556 - brc - INFO - Average loss from batch 1 to 100 is 62.930894737243655
+2019-05-25 08:42:26,423 - brc - INFO - ====== training ======
+2019-05-25 08:42:26,438 - brc - INFO - Load data_set and vocab...
+2019-05-25 08:56:40,756 - brc - INFO - Train set size: 83646 questions.
+2019-05-25 09:03:28,715 - brc - INFO - Dev set size: 5000 questions.
+2019-05-25 09:03:28,803 - brc - INFO - Converting text into ids...
+2019-05-25 09:23:43,249 - brc - INFO - ====== training ======
+2019-05-25 09:23:43,249 - brc - INFO - Load data_set and vocab...
+2019-05-25 09:23:57,317 - brc - INFO - Train set size: 4353 questions.
+2019-05-25 09:24:04,718 - brc - INFO - Dev set size: 5000 questions.
+2019-05-25 09:24:04,718 - brc - INFO - Converting text into ids...
+2019-05-25 09:24:18,492 - brc - INFO - Initialize the model...
+2019-05-25 09:24:26,734 - brc - INFO - Time to build graph: 6.951078414916992 s
+2019-05-25 09:24:37,880 - brc - INFO - Training the model...
+2019-05-25 09:24:55,126 - brc - INFO - Training the model for epoch 1
+2019-05-25 09:30:21,399 - brc - INFO - Average train loss for epoch 1 is 77.22505950226503
+2019-05-25 09:30:21,400 - brc - INFO - Evaluating the model after epoch 1
+2019-05-25 09:34:59,524 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 09:34:59,525 - brc - INFO - Dev eval result: {'Bleu-1': 4.3122647548918825e-09, 'Bleu-2': 3.4397335620686768e-09, 'Bleu-3': 3.004554868954801e-09, 'Bleu-4': 2.8035096361100165e-09, 'Rouge-L': 0.03341700108373835}
+2019-05-25 09:35:10,876 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-25 09:35:11,571 - brc - INFO - Training the model for epoch 2
+2019-05-25 09:40:45,323 - brc - INFO - Average train loss for epoch 2 is 67.33619471858529
+2019-05-25 09:40:45,323 - brc - INFO - Evaluating the model after epoch 2
+2019-05-25 09:45:24,770 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 09:45:24,770 - brc - INFO - Dev eval result: {'Bleu-1': 2.2848349090452276e-09, 'Bleu-2': 1.5982457976326648e-09, 'Bleu-3': 1.2883540884701915e-09, 'Bleu-4': 1.1103019947201233e-09, 'Rouge-L': 0.031737388412028326}
+2019-05-25 09:45:25,439 - brc - INFO - Training the model for epoch 3
+2019-05-25 09:50:59,296 - brc - INFO - Average train loss for epoch 3 is 64.74819822171155
+2019-05-25 09:50:59,296 - brc - INFO - Evaluating the model after epoch 3
+2019-05-25 09:55:42,811 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 09:55:42,811 - brc - INFO - Dev eval result: {'Bleu-1': 0.0017174868828001735, 'Bleu-2': 0.0011914867738303215, 'Bleu-3': 0.000955645910485461, 'Bleu-4': 0.0008258857676747239, 'Rouge-L': 0.0656339912360089}
+2019-05-25 09:55:56,487 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-25 09:55:57,177 - brc - INFO - Training the model for epoch 4
+2019-05-25 10:01:36,167 - brc - INFO - Average train loss for epoch 4 is 62.45447852331049
+2019-05-25 10:01:36,167 - brc - INFO - Evaluating the model after epoch 4
+2019-05-25 10:06:27,942 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 10:06:27,942 - brc - INFO - Dev eval result: {'Bleu-1': 0.013198725929548901, 'Bleu-2': 0.008858511934550176, 'Bleu-3': 0.007004296389759763, 'Bleu-4': 0.006003493548994768, 'Rouge-L': 0.07052606455865133}
+2019-05-25 10:06:41,970 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-25 10:06:42,661 - brc - INFO - Training the model for epoch 5
+2019-05-25 10:12:17,209 - brc - INFO - Average train loss for epoch 5 is 61.24640337158652
+2019-05-25 10:12:17,209 - brc - INFO - Evaluating the model after epoch 5
+2019-05-25 10:17:09,638 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 10:17:09,639 - brc - INFO - Dev eval result: {'Bleu-1': 0.06615668583941636, 'Bleu-2': 0.04546124564424519, 'Bleu-3': 0.03601965633326675, 'Bleu-4': 0.030890610503140844, 'Rouge-L': 0.09426001593045388}
+2019-05-25 10:17:20,892 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-25 10:17:21,576 - brc - INFO - Training the model for epoch 6
+2019-05-25 10:22:57,402 - brc - INFO - Average train loss for epoch 6 is 60.607132638201996
+2019-05-25 10:22:57,402 - brc - INFO - Evaluating the model after epoch 6
+2019-05-25 10:28:01,870 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 10:28:01,870 - brc - INFO - Dev eval result: {'Bleu-1': 0.14190670861894136, 'Bleu-2': 0.09943843822575721, 'Bleu-3': 0.07981781932231274, 'Bleu-4': 0.06907316024186054, 'Rouge-L': 0.10173063781911047}
+2019-05-25 10:28:16,097 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-25 10:28:16,798 - brc - INFO - Training the model for epoch 7
+2019-05-25 10:33:51,601 - brc - INFO - Average train loss for epoch 7 is 59.88262642131132
+2019-05-25 10:33:51,601 - brc - INFO - Evaluating the model after epoch 7
+2019-05-25 10:38:49,253 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 10:38:49,253 - brc - INFO - Dev eval result: {'Bleu-1': 0.08282611769761129, 'Bleu-2': 0.0563584025581119, 'Bleu-3': 0.044472085597994336, 'Bleu-4': 0.03802543315040233, 'Rouge-L': 0.09617646188940289}
+2019-05-25 10:38:49,980 - brc - INFO - Training the model for epoch 8
+2019-05-25 10:44:24,735 - brc - INFO - Average train loss for epoch 8 is 59.17136551352108
+2019-05-25 10:44:24,735 - brc - INFO - Evaluating the model after epoch 8
+2019-05-25 10:49:17,945 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 10:49:17,945 - brc - INFO - Dev eval result: {'Bleu-1': 0.06121466502649541, 'Bleu-2': 0.043554921458804435, 'Bleu-3': 0.03530885874061155, 'Bleu-4': 0.030784023539839667, 'Rouge-L': 0.08718395636529457}
+2019-05-25 10:49:18,647 - brc - INFO - Training the model for epoch 9
+2019-05-25 10:54:53,021 - brc - INFO - Average train loss for epoch 9 is 58.87266317886465
+2019-05-25 10:54:53,021 - brc - INFO - Evaluating the model after epoch 9
+2019-05-25 10:59:50,834 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 10:59:50,834 - brc - INFO - Dev eval result: {'Bleu-1': 0.1448957511814363, 'Bleu-2': 0.10192786426854664, 'Bleu-3': 0.08210872105261043, 'Bleu-4': 0.07124047288418967, 'Rouge-L': 0.11200539808879172}
+2019-05-25 11:00:04,391 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-25 11:00:05,082 - brc - INFO - Training the model for epoch 10
+2019-05-25 11:05:40,492 - brc - INFO - Average train loss for epoch 10 is 58.51966155276579
+2019-05-25 11:05:40,492 - brc - INFO - Evaluating the model after epoch 10
+2019-05-25 11:10:29,287 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 11:10:29,287 - brc - INFO - Dev eval result: {'Bleu-1': 0.02290166780974827, 'Bleu-2': 0.015650317167943677, 'Bleu-3': 0.012447630201820449, 'Bleu-4': 0.010726784340586206, 'Rouge-L': 0.07995789483095252}
+2019-05-25 11:10:30,021 - brc - INFO - Training the model for epoch 11
+2019-05-25 11:16:04,128 - brc - INFO - Average train loss for epoch 11 is 58.07162957331713
+2019-05-25 11:16:04,128 - brc - INFO - Evaluating the model after epoch 11
+2019-05-25 11:21:01,031 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 11:21:01,031 - brc - INFO - Dev eval result: {'Bleu-1': 0.10506548588226305, 'Bleu-2': 0.07308294256959683, 'Bleu-3': 0.05844717638909675, 'Bleu-4': 0.050420586269094556, 'Rouge-L': 0.09859999453515873}
+2019-05-25 11:21:01,721 - brc - INFO - Training the model for epoch 12
+2019-05-25 11:26:38,695 - brc - INFO - Average train loss for epoch 12 is 57.80440836093005
+2019-05-25 11:26:38,695 - brc - INFO - Evaluating the model after epoch 12
+2019-05-25 11:31:52,030 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 11:31:52,031 - brc - INFO - Dev eval result: {'Bleu-1': 0.21591256819053103, 'Bleu-2': 0.15431973463594675, 'Bleu-3': 0.12480894547559514, 'Bleu-4': 0.10844954655240607, 'Rouge-L': 0.11724435089675471}
+2019-05-25 11:32:07,548 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-25 11:32:08,367 - brc - INFO - Training the model for epoch 13
+2019-05-25 11:37:51,970 - brc - INFO - Average train loss for epoch 13 is 57.45921868436477
+2019-05-25 11:37:51,971 - brc - INFO - Evaluating the model after epoch 13
+2019-05-25 11:43:02,748 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 11:43:02,748 - brc - INFO - Dev eval result: {'Bleu-1': 0.15079733067230136, 'Bleu-2': 0.10734492234748269, 'Bleu-3': 0.08699493163392177, 'Bleu-4': 0.07575869603012741, 'Rouge-L': 0.11745856649068427}
+2019-05-25 11:43:17,400 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-25 11:43:18,203 - brc - INFO - Training the model for epoch 14
+2019-05-25 11:49:04,106 - brc - INFO - Average train loss for epoch 14 is 57.14628069190418
+2019-05-25 11:49:04,106 - brc - INFO - Evaluating the model after epoch 14
+2019-05-25 11:54:10,496 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 11:54:10,496 - brc - INFO - Dev eval result: {'Bleu-1': 0.10090011668400213, 'Bleu-2': 0.0708147910903643, 'Bleu-3': 0.05684544295302803, 'Bleu-4': 0.049275017055178304, 'Rouge-L': 0.09509410319697922}
+2019-05-25 11:54:11,284 - brc - INFO - Training the model for epoch 15
+2019-05-25 11:59:57,144 - brc - INFO - Average train loss for epoch 15 is 57.23150156175389
+2019-05-25 11:59:57,144 - brc - INFO - Evaluating the model after epoch 15
+2019-05-25 12:05:01,638 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 12:05:01,639 - brc - INFO - Dev eval result: {'Bleu-1': 0.09809764243949742, 'Bleu-2': 0.06975727514081563, 'Bleu-3': 0.056404093125504616, 'Bleu-4': 0.04908068430710387, 'Rouge-L': 0.09315248955814813}
+2019-05-25 12:05:02,452 - brc - INFO - Training the model for epoch 16
+2019-05-25 12:10:47,846 - brc - INFO - Average train loss for epoch 16 is 56.94367969036102
+2019-05-25 12:10:47,846 - brc - INFO - Evaluating the model after epoch 16
+2019-05-25 12:15:43,108 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 12:15:43,108 - brc - INFO - Dev eval result: {'Bleu-1': 0.0026796048468320835, 'Bleu-2': 0.0016878549919383708, 'Bleu-3': 0.0012755894474964417, 'Bleu-4': 0.0010584485407754037, 'Rouge-L': 0.05160301254308482}
+2019-05-25 12:15:43,913 - brc - INFO - Training the model for epoch 17
+2019-05-25 12:21:29,410 - brc - INFO - Average train loss for epoch 17 is 57.04743832700393
+2019-05-25 12:21:29,411 - brc - INFO - Evaluating the model after epoch 17
+2019-05-25 12:26:24,395 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 12:26:24,396 - brc - INFO - Dev eval result: {'Bleu-1': 0.012205216162021783, 'Bleu-2': 0.008647402375829396, 'Bleu-3': 0.006987145983748143, 'Bleu-4': 0.006067679907325418, 'Rouge-L': 0.07607780647045376}
+2019-05-25 12:26:25,188 - brc - INFO - Training the model for epoch 18
+2019-05-25 12:32:10,515 - brc - INFO - Average train loss for epoch 18 is 56.43284134654438
+2019-05-25 12:32:10,515 - brc - INFO - Evaluating the model after epoch 18
+2019-05-25 18:01:23,458 - brc - INFO - ====== training ======
+2019-05-25 18:01:23,467 - brc - INFO - Load data_set and vocab...
+2019-05-25 18:01:39,289 - brc - INFO - Train set size: 4353 questions.
+2019-05-25 18:01:47,688 - brc - INFO - Dev set size: 5000 questions.
+2019-05-25 18:01:47,688 - brc - INFO - Converting text into ids...
+2019-05-25 18:02:03,432 - brc - INFO - Initialize the model...
+2019-05-25 18:02:26,541 - brc - INFO - Time to build graph: 8.08459186553955 s
+2019-05-25 18:02:47,323 - brc - INFO - Training the model...
+2019-05-25 18:03:07,003 - brc - INFO - Training the model for epoch 1
+2019-05-25 18:08:18,885 - brc - INFO - Average train loss for epoch 1 is 76.05048058313481
+2019-05-25 18:08:18,885 - brc - INFO - Evaluating the model after epoch 1
+2019-05-25 18:12:53,655 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 18:12:53,656 - brc - INFO - Dev eval result: {'Bleu-1': 2.499211944152163e-12, 'Bleu-2': 1.9611086976154996e-12, 'Bleu-3': 1.701802601301763e-12, 'Bleu-4': 1.5378500217325836e-12, 'Rouge-L': 0.030382862581751713}
+2019-05-25 18:13:06,532 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-25 18:13:07,330 - brc - INFO - Training the model for epoch 2
+2019-05-25 18:18:23,889 - brc - INFO - Average train loss for epoch 2 is 67.13105179983027
+2019-05-25 18:18:23,889 - brc - INFO - Evaluating the model after epoch 2
+2019-05-25 18:23:00,145 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 18:23:00,145 - brc - INFO - Dev eval result: {'Bleu-1': 4.6721191773562993e-08, 'Bleu-2': 3.005922527079372e-08, 'Bleu-3': 2.272869062060262e-08, 'Bleu-4': 1.8738283764135192e-08, 'Rouge-L': 0.031053784304543943}
+2019-05-25 18:23:14,695 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-25 18:23:15,481 - brc - INFO - Training the model for epoch 3
+2019-05-25 18:28:31,854 - brc - INFO - Average train loss for epoch 3 is 65.27788224641014
+2019-05-25 18:28:31,854 - brc - INFO - Evaluating the model after epoch 3
+2019-05-25 18:33:09,814 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 18:33:09,814 - brc - INFO - Dev eval result: {'Bleu-1': 0.0045485242735848535, 'Bleu-2': 0.0031354695969684123, 'Bleu-3': 0.002502231392264138, 'Bleu-4': 0.0021542099692346884, 'Rouge-L': 0.08021745979130991}
+2019-05-25 18:33:24,830 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-25 18:33:25,639 - brc - INFO - Training the model for epoch 4
+2019-05-25 18:38:41,435 - brc - INFO - Average train loss for epoch 4 is 63.675903383423304
+2019-05-25 18:38:41,435 - brc - INFO - Evaluating the model after epoch 4
+2019-05-25 18:43:41,701 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 18:43:41,701 - brc - INFO - Dev eval result: {'Bleu-1': 0.2070901478072634, 'Bleu-2': 0.1471775478457959, 'Bleu-3': 0.11926228517661168, 'Bleu-4': 0.10399883384453382, 'Rouge-L': 0.11004611776337571}
+2019-05-25 18:43:54,216 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-25 18:43:55,023 - brc - INFO - Training the model for epoch 5
+2019-05-25 18:49:11,290 - brc - INFO - Average train loss for epoch 5 is 61.97200287089628
+2019-05-25 18:49:11,290 - brc - INFO - Evaluating the model after epoch 5
+2019-05-25 18:53:49,419 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 18:53:49,419 - brc - INFO - Dev eval result: {'Bleu-1': 0.004025350952008008, 'Bleu-2': 0.0028573465264419584, 'Bleu-3': 0.002331631802006394, 'Bleu-4': 0.0020476172291286473, 'Rouge-L': 0.07163210559346886}
+2019-05-25 18:53:50,208 - brc - INFO - Training the model for epoch 6
+2019-05-25 18:58:56,793 - brc - INFO - Average train loss for epoch 6 is 60.556973814964294
+2019-05-25 18:58:56,793 - brc - INFO - Evaluating the model after epoch 6
+2019-05-25 19:03:28,747 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 19:03:28,747 - brc - INFO - Dev eval result: {'Bleu-1': 0.053884847287112535, 'Bleu-2': 0.03813393005908449, 'Bleu-3': 0.030810814035583365, 'Bleu-4': 0.026804515194844766, 'Rouge-L': 0.09413722952953132}
+2019-05-25 19:03:29,417 - brc - INFO - Training the model for epoch 7
+2019-05-25 19:08:35,054 - brc - INFO - Average train loss for epoch 7 is 60.078698337078094
+2019-05-25 19:08:35,054 - brc - INFO - Evaluating the model after epoch 7
+2019-05-25 19:13:01,427 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 19:13:01,427 - brc - INFO - Dev eval result: {'Bleu-1': 0.010101518132421489, 'Bleu-2': 0.0071208199841080394, 'Bleu-3': 0.005791114809612685, 'Bleu-4': 0.005072307081725356, 'Rouge-L': 0.06148215358687986}
+2019-05-25 19:13:02,092 - brc - INFO - Training the model for epoch 8
+2019-05-25 19:18:07,792 - brc - INFO - Average train loss for epoch 8 is 59.33419431658352
+2019-05-25 19:18:07,792 - brc - INFO - Evaluating the model after epoch 8
+2019-05-25 19:22:55,531 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 19:22:55,531 - brc - INFO - Dev eval result: {'Bleu-1': 0.23630589324237997, 'Bleu-2': 0.17091491150671295, 'Bleu-3': 0.1397587986299194, 'Bleu-4': 0.12244383391245268, 'Rouge-L': 0.11186485089676058}
+2019-05-25 19:23:08,494 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-25 19:23:09,164 - brc - INFO - Training the model for epoch 9
+2019-05-25 19:28:14,732 - brc - INFO - Average train loss for epoch 9 is 58.97972048380796
+2019-05-25 19:28:14,732 - brc - INFO - Evaluating the model after epoch 9
+2019-05-25 19:32:49,949 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 19:32:49,949 - brc - INFO - Dev eval result: {'Bleu-1': 0.0992148528076514, 'Bleu-2': 0.06953329332857855, 'Bleu-3': 0.055550007163274934, 'Bleu-4': 0.047906434967718396, 'Rouge-L': 0.08968707109124928}
+2019-05-25 19:32:50,882 - brc - INFO - Training the model for epoch 10
+2019-05-25 19:37:56,374 - brc - INFO - Average train loss for epoch 10 is 58.5537747074576
+2019-05-25 19:37:56,374 - brc - INFO - Evaluating the model after epoch 10
+2019-05-25 19:42:30,989 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 19:42:30,990 - brc - INFO - Dev eval result: {'Bleu-1': 0.10453569765523359, 'Bleu-2': 0.07358596339071308, 'Bleu-3': 0.0592000916550565, 'Bleu-4': 0.05135046444550282, 'Rouge-L': 0.09985533897628916}
+2019-05-25 19:42:31,922 - brc - INFO - Training the model for epoch 11
+2019-05-25 19:47:37,372 - brc - INFO - Average train loss for epoch 11 is 58.14039946303648
+2019-05-25 19:47:37,373 - brc - INFO - Evaluating the model after epoch 11
+2019-05-25 19:52:07,612 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 19:52:07,613 - brc - INFO - Dev eval result: {'Bleu-1': 0.04246795502849334, 'Bleu-2': 0.02956190657895076, 'Bleu-3': 0.023519758059112644, 'Bleu-4': 0.020204327855366393, 'Rouge-L': 0.09368335353982238}
+2019-05-25 19:52:08,285 - brc - INFO - Training the model for epoch 12
+2019-05-25 19:57:13,387 - brc - INFO - Average train loss for epoch 12 is 57.908540816868054
+2019-05-25 19:57:13,388 - brc - INFO - Evaluating the model after epoch 12
+2019-05-25 20:01:37,336 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 20:01:37,336 - brc - INFO - Dev eval result: {'Bleu-1': 0.00046544896036979154, 'Bleu-2': 0.000333591176700862, 'Bleu-3': 0.0002713732150644127, 'Bleu-4': 0.00023658571729656574, 'Rouge-L': 0.06178116749998235}
+2019-05-25 20:01:38,016 - brc - INFO - Training the model for epoch 13
+2019-05-25 20:06:43,047 - brc - INFO - Average train loss for epoch 13 is 57.66631671961616
+2019-05-25 20:06:43,047 - brc - INFO - Evaluating the model after epoch 13
+2019-05-25 20:11:13,488 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 20:11:13,488 - brc - INFO - Dev eval result: {'Bleu-1': 0.036678680374891526, 'Bleu-2': 0.02530688041435686, 'Bleu-3': 0.020105382385698676, 'Bleu-4': 0.01728882929514596, 'Rouge-L': 0.07964353576898558}
+2019-05-25 20:11:14,161 - brc - INFO - Training the model for epoch 14
+2019-05-25 20:16:19,508 - brc - INFO - Average train loss for epoch 14 is 57.57032787799835
+2019-05-25 20:16:19,508 - brc - INFO - Evaluating the model after epoch 14
+2019-05-25 20:20:51,264 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 20:20:51,264 - brc - INFO - Dev eval result: {'Bleu-1': 0.054751085457122664, 'Bleu-2': 0.03842390714902043, 'Bleu-3': 0.030712082598861573, 'Bleu-4': 0.026451811368081446, 'Rouge-L': 0.08654144365679697}
+2019-05-25 20:20:51,928 - brc - INFO - Training the model for epoch 15
+2019-05-25 20:25:57,553 - brc - INFO - Average train loss for epoch 15 is 57.466733038425446
+2019-05-25 20:25:57,553 - brc - INFO - Evaluating the model after epoch 15
+2019-05-25 20:30:23,586 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 20:30:23,586 - brc - INFO - Dev eval result: {'Bleu-1': 0.005153744202183131, 'Bleu-2': 0.003592551199004115, 'Bleu-3': 0.002859080874905466, 'Bleu-4': 0.0024663089786907404, 'Rouge-L': 0.0723878923742672}
+2019-05-25 20:30:24,275 - brc - INFO - Training the model for epoch 16
+2019-05-25 20:35:29,689 - brc - INFO - Average train loss for epoch 16 is 57.18876941765056
+2019-05-25 20:35:29,689 - brc - INFO - Evaluating the model after epoch 16
+2019-05-25 20:39:56,127 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 20:39:56,127 - brc - INFO - Dev eval result: {'Bleu-1': 0.0073087783583059614, 'Bleu-2': 0.004983177261529471, 'Bleu-3': 0.003908951938596104, 'Bleu-4': 0.00332061334196301, 'Rouge-L': 0.07603284768904663}
+2019-05-25 20:39:56,796 - brc - INFO - Training the model for epoch 17
+2019-05-25 20:45:02,101 - brc - INFO - Average train loss for epoch 17 is 56.68157412374721
+2019-05-25 20:45:02,102 - brc - INFO - Evaluating the model after epoch 17
+2019-05-25 20:49:25,608 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 20:49:25,608 - brc - INFO - Dev eval result: {'Bleu-1': 0.0001606727761489881, 'Bleu-2': 0.00010963782111264834, 'Bleu-3': 8.743113479932974e-05, 'Bleu-4': 7.539282050416206e-05, 'Rouge-L': 0.049477603582017825}
+2019-05-25 20:49:26,279 - brc - INFO - Training the model for epoch 18
+2019-05-25 20:54:31,782 - brc - INFO - Average train loss for epoch 18 is 56.78354875831043
+2019-05-25 20:54:31,782 - brc - INFO - Evaluating the model after epoch 18
+2019-05-25 20:58:59,249 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-25 20:58:59,249 - brc - INFO - Dev eval result: {'Bleu-1': 0.00632980290230749, 'Bleu-2': 0.004275934330388781, 'Bleu-3': 0.0033309951188157136, 'Bleu-4': 0.002805743312459308, 'Rouge-L': 0.07442909127063166}
+2019-05-25 20:58:59,916 - brc - INFO - Training the model for epoch 19
+2019-05-27 09:25:16,152 - brc - INFO - ====== training ======
+2019-05-27 09:25:16,152 - brc - INFO - Load data_set and vocab...
+2019-05-27 09:25:30,178 - brc - INFO - Train set size: 4353 questions.
+2019-05-27 09:25:37,688 - brc - INFO - Dev set size: 5000 questions.
+2019-05-27 09:25:37,688 - brc - INFO - Converting text into ids...
+2019-05-27 09:25:51,478 - brc - INFO - Initialize the model...
+2019-05-27 09:26:12,080 - brc - INFO - Time to build graph: 7.209993124008179 s
+2019-05-27 09:26:31,573 - brc - INFO - Training the model...
+2019-05-27 09:26:49,300 - brc - INFO - Training the model for epoch 1
+2019-05-27 09:32:17,432 - brc - INFO - Average train loss for epoch 1 is 76.02774403375737
+2019-05-27 09:32:17,432 - brc - INFO - Evaluating the model after epoch 1
+2019-05-27 09:36:57,759 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 09:36:57,759 - brc - INFO - Dev eval result: {'Bleu-1': 0.00017964077109742155, 'Bleu-2': 0.00012481995461591382, 'Bleu-3': 9.893318039523496e-05, 'Bleu-4': 8.49299050651274e-05, 'Rouge-L': 0.051627952090267056}
+2019-05-27 09:37:11,249 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-27 09:37:12,110 - brc - INFO - Training the model for epoch 2
+2019-05-27 09:42:51,897 - brc - INFO - Average train loss for epoch 2 is 66.58507091157577
+2019-05-27 09:42:51,897 - brc - INFO - Evaluating the model after epoch 2
+2019-05-27 09:47:48,878 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 09:47:48,878 - brc - INFO - Dev eval result: {'Bleu-1': 0.0026806149556129824, 'Bleu-2': 0.0018260104276396146, 'Bleu-3': 0.001428313810302364, 'Bleu-4': 0.0012042750576403377, 'Rouge-L': 0.0791474106972834}
+2019-05-27 09:48:04,377 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-27 09:48:05,237 - brc - INFO - Training the model for epoch 3
+2019-05-27 09:53:51,987 - brc - INFO - Average train loss for epoch 3 is 64.73779858561123
+2019-05-27 09:53:51,987 - brc - INFO - Evaluating the model after epoch 3
+2019-05-27 09:58:57,091 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 09:58:57,091 - brc - INFO - Dev eval result: {'Bleu-1': 0.07927779432566144, 'Bleu-2': 0.05594019873329108, 'Bleu-3': 0.044923733927238176, 'Bleu-4': 0.03877103371739421, 'Rouge-L': 0.11014427104826262}
+2019-05-27 09:59:11,727 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-27 09:59:12,562 - brc - INFO - Training the model for epoch 4
+2019-05-27 10:04:58,529 - brc - INFO - Average train loss for epoch 4 is 63.15355734264149
+2019-05-27 10:04:58,529 - brc - INFO - Evaluating the model after epoch 4
+2019-05-27 10:09:57,378 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 10:09:57,378 - brc - INFO - Dev eval result: {'Bleu-1': 0.02787125275588521, 'Bleu-2': 0.019348087445066626, 'Bleu-3': 0.015391111435197112, 'Bleu-4': 0.013169693625256716, 'Rouge-L': 0.09354875448442872}
+2019-05-27 10:09:58,208 - brc - INFO - Training the model for epoch 5
+2019-05-27 10:15:44,929 - brc - INFO - Average train loss for epoch 5 is 61.77185780861799
+2019-05-27 10:15:44,929 - brc - INFO - Evaluating the model after epoch 5
+2019-05-27 10:20:43,675 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 10:20:43,675 - brc - INFO - Dev eval result: {'Bleu-1': 0.04469951472261231, 'Bleu-2': 0.03167010086982266, 'Bleu-3': 0.025540957543059274, 'Bleu-4': 0.02214662146112992, 'Rouge-L': 0.09450977530239556}
+2019-05-27 10:20:44,509 - brc - INFO - Training the model for epoch 6
+2019-05-27 10:26:31,040 - brc - INFO - Average train loss for epoch 6 is 61.00560886018417
+2019-05-27 10:26:31,040 - brc - INFO - Evaluating the model after epoch 6
+2019-05-27 10:31:30,562 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 10:31:30,563 - brc - INFO - Dev eval result: {'Bleu-1': 0.03149729188553981, 'Bleu-2': 0.02219906699135115, 'Bleu-3': 0.017828384970390104, 'Bleu-4': 0.015401318582960519, 'Rouge-L': 0.0988320796589688}
+2019-05-27 10:31:31,383 - brc - INFO - Training the model for epoch 7
+2019-05-27 10:37:18,229 - brc - INFO - Average train loss for epoch 7 is 60.407343703157764
+2019-05-27 10:37:18,229 - brc - INFO - Evaluating the model after epoch 7
+2019-05-27 10:42:00,664 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 10:42:00,664 - brc - INFO - Dev eval result: {'Bleu-1': 0.04967428814415652, 'Bleu-2': 0.03510593969705925, 'Bleu-3': 0.028262027539638752, 'Bleu-4': 0.024442872018259287, 'Rouge-L': 0.10035525462188491}
+2019-05-27 10:42:01,363 - brc - INFO - Training the model for epoch 8
+2019-05-27 10:47:09,887 - brc - INFO - Average train loss for epoch 8 is 59.70974840136135
+2019-05-27 10:47:09,887 - brc - INFO - Evaluating the model after epoch 8
+2019-05-27 10:51:50,646 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 10:51:50,646 - brc - INFO - Dev eval result: {'Bleu-1': 0.13408108631788743, 'Bleu-2': 0.09549405825054566, 'Bleu-3': 0.07713352940449313, 'Bleu-4': 0.06685315431035037, 'Rouge-L': 0.11582111755964121}
+2019-05-27 10:52:04,417 - brc - INFO - Model saved in data\models, with prefix r-net.
+2019-05-27 10:52:05,110 - brc - INFO - Training the model for epoch 9
+2019-05-27 10:57:13,851 - brc - INFO - Average train loss for epoch 9 is 59.43007297375623
+2019-05-27 10:57:13,851 - brc - INFO - Evaluating the model after epoch 9
+2019-05-27 11:01:41,923 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 11:01:41,923 - brc - INFO - Dev eval result: {'Bleu-1': 0.00706864939198009, 'Bleu-2': 0.0049700215235906516, 'Bleu-3': 0.004001113514453728, 'Bleu-4': 0.0034613987494725488, 'Rouge-L': 0.0830778863393346}
+2019-05-27 11:01:42,626 - brc - INFO - Training the model for epoch 10
+2019-05-27 11:06:51,313 - brc - INFO - Average train loss for epoch 10 is 58.84825259797714
+2019-05-27 11:06:51,313 - brc - INFO - Evaluating the model after epoch 10
+2019-05-27 11:11:23,754 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 11:11:23,754 - brc - INFO - Dev eval result: {'Bleu-1': 0.046982827298996874, 'Bleu-2': 0.033184750484927084, 'Bleu-3': 0.026843218697880013, 'Bleu-4': 0.0233441882697038, 'Rouge-L': 0.09406523240614723}
+2019-05-27 11:11:24,449 - brc - INFO - Training the model for epoch 11
+2019-05-27 11:16:32,864 - brc - INFO - Average train loss for epoch 11 is 58.55304817592396
+2019-05-27 11:16:32,865 - brc - INFO - Evaluating the model after epoch 11
+2019-05-27 11:21:06,193 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 11:21:06,193 - brc - INFO - Dev eval result: {'Bleu-1': 0.06283421819282135, 'Bleu-2': 0.04338408849974711, 'Bleu-3': 0.034713371468335676, 'Bleu-4': 0.030018724619000764, 'Rouge-L': 0.09487090347231392}
+2019-05-27 11:21:06,891 - brc - INFO - Training the model for epoch 12
+2019-05-27 11:26:15,775 - brc - INFO - Average train loss for epoch 12 is 58.19673725436716
+2019-05-27 11:26:15,775 - brc - INFO - Evaluating the model after epoch 12
+2019-05-27 11:30:47,839 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 11:30:47,839 - brc - INFO - Dev eval result: {'Bleu-1': 0.051486950978821305, 'Bleu-2': 0.03682786932886404, 'Bleu-3': 0.030128975431717074, 'Bleu-4': 0.02648290559402741, 'Rouge-L': 0.0918213274873414}
+2019-05-27 11:30:48,535 - brc - INFO - Training the model for epoch 13
+2019-05-27 11:35:56,870 - brc - INFO - Average train loss for epoch 13 is 57.828269958496094
+2019-05-27 11:35:56,870 - brc - INFO - Evaluating the model after epoch 13
+2019-05-27 11:40:26,462 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 11:40:26,462 - brc - INFO - Dev eval result: {'Bleu-1': 0.022608889232709744, 'Bleu-2': 0.01600014123486789, 'Bleu-3': 0.01295957999833507, 'Bleu-4': 0.011302639606504817, 'Rouge-L': 0.08526982702885566}
+2019-05-27 11:40:27,415 - brc - INFO - Training the model for epoch 14
+2019-05-27 11:45:35,633 - brc - INFO - Average train loss for epoch 14 is 57.73362301377689
+2019-05-27 11:45:35,633 - brc - INFO - Evaluating the model after epoch 14
+2019-05-27 11:50:23,674 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 11:50:23,674 - brc - INFO - Dev eval result: {'Bleu-1': 0.0373993150701595, 'Bleu-2': 0.026864582048881296, 'Bleu-3': 0.022038131684391397, 'Bleu-4': 0.01940853592101916, 'Rouge-L': 0.09012777392570646}
+2019-05-27 11:50:24,537 - brc - INFO - Training the model for epoch 15
+2019-05-27 11:56:06,352 - brc - INFO - Average train loss for epoch 15 is 57.59504906219595
+2019-05-27 11:56:06,354 - brc - INFO - Evaluating the model after epoch 15
+2019-05-27 12:01:05,280 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 12:01:05,280 - brc - INFO - Dev eval result: {'Bleu-1': 0.058702451343938464, 'Bleu-2': 0.041748881870401953, 'Bleu-3': 0.033789866537862076, 'Bleu-4': 0.029429829757563204, 'Rouge-L': 0.08279435647248991}
+2019-05-27 12:01:06,093 - brc - INFO - Training the model for epoch 16
+2019-05-27 12:06:40,775 - brc - INFO - Average train loss for epoch 16 is 57.57134506982916
+2019-05-27 12:06:40,775 - brc - INFO - Evaluating the model after epoch 16
+2019-05-27 12:12:00,385 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 12:12:00,387 - brc - INFO - Dev eval result: {'Bleu-1': 0.2876296504020152, 'Bleu-2': 0.2107068131737575, 'Bleu-3': 0.17309584554625784, 'Bleu-4': 0.15211024019405664, 'Rouge-L': 0.11027866473405314}
+2019-05-27 12:12:01,260 - brc - INFO - Training the model for epoch 17
+2019-05-27 12:17:37,478 - brc - INFO - Average train loss for epoch 17 is 57.30527488273733
+2019-05-27 12:17:37,478 - brc - INFO - Evaluating the model after epoch 17
+2019-05-27 12:22:43,086 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 12:22:43,087 - brc - INFO - Dev eval result: {'Bleu-1': 0.18447547318740135, 'Bleu-2': 0.13330334744146335, 'Bleu-3': 0.1090487407618468, 'Bleu-4': 0.09570180966604527, 'Rouge-L': 0.11376592388299822}
+2019-05-27 12:22:43,829 - brc - INFO - Training the model for epoch 18
+2019-05-27 12:28:17,790 - brc - INFO - Average train loss for epoch 18 is 57.08610216309042
+2019-05-27 12:28:17,790 - brc - INFO - Evaluating the model after epoch 18
+2019-05-27 12:33:34,699 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 12:33:34,699 - brc - INFO - Dev eval result: {'Bleu-1': 0.29728701391925955, 'Bleu-2': 0.21225509184254482, 'Bleu-3': 0.1707818737545363, 'Bleu-4': 0.14775681450121217, 'Rouge-L': 0.11048474722284603}
+2019-05-27 12:33:35,448 - brc - INFO - Training the model for epoch 19
+2019-05-27 12:39:09,810 - brc - INFO - Average train loss for epoch 19 is 57.12345000224955
+2019-05-27 12:39:09,810 - brc - INFO - Evaluating the model after epoch 19
+2019-05-27 12:44:00,111 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 12:44:00,111 - brc - INFO - Dev eval result: {'Bleu-1': 0.047573510991930995, 'Bleu-2': 0.03393662518375865, 'Bleu-3': 0.027551104837500968, 'Bleu-4': 0.02405445406392937, 'Rouge-L': 0.07560567009607363}
+2019-05-27 12:44:00,839 - brc - INFO - Training the model for epoch 20
+2019-05-27 12:49:40,071 - brc - INFO - Average train loss for epoch 20 is 56.86300515076693
+2019-05-27 12:49:40,071 - brc - INFO - Evaluating the model after epoch 20
+2019-05-27 12:54:32,230 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 12:54:32,231 - brc - INFO - Dev eval result: {'Bleu-1': 0.022099279705353764, 'Bleu-2': 0.016515677911409815, 'Bleu-3': 0.01377801640252763, 'Bleu-4': 0.012206945095305788, 'Rouge-L': 0.06736799017573877}
+2019-05-27 12:54:32,994 - brc - INFO - Training the model for epoch 21
+2019-05-27 13:00:14,902 - brc - INFO - Average train loss for epoch 21 is 56.68294791614308
+2019-05-27 13:00:14,902 - brc - INFO - Evaluating the model after epoch 21
+2019-05-27 13:05:07,863 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 13:05:07,863 - brc - INFO - Dev eval result: {'Bleu-1': 0.03215247520573897, 'Bleu-2': 0.022730667749291344, 'Bleu-3': 0.018382904578938507, 'Bleu-4': 0.016019298322360483, 'Rouge-L': 0.07324622466050462}
+2019-05-27 13:05:08,601 - brc - INFO - Training the model for epoch 22
+2019-05-27 13:10:51,554 - brc - INFO - Average train loss for epoch 22 is 56.67655933604521
+2019-05-27 13:10:51,557 - brc - INFO - Evaluating the model after epoch 22
+2019-05-27 13:16:04,254 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 13:16:04,254 - brc - INFO - Dev eval result: {'Bleu-1': 0.16201634991779815, 'Bleu-2': 0.11660711805763305, 'Bleu-3': 0.09458482332947904, 'Bleu-4': 0.08221818109433826, 'Rouge-L': 0.0865180334482523}
+2019-05-27 13:16:05,006 - brc - INFO - Training the model for epoch 23
+2019-05-27 13:21:42,128 - brc - INFO - Average train loss for epoch 23 is 56.475408915211176
+2019-05-27 13:21:42,131 - brc - INFO - Evaluating the model after epoch 23
+2019-05-27 13:26:44,692 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 13:26:44,692 - brc - INFO - Dev eval result: {'Bleu-1': 0.11873408074417902, 'Bleu-2': 0.08586625724730237, 'Bleu-3': 0.07017628209308666, 'Bleu-4': 0.06141954522042436, 'Rouge-L': 0.08841042612846893}
+2019-05-27 13:26:45,424 - brc - INFO - Training the model for epoch 24
+2019-05-27 13:32:19,518 - brc - INFO - Average train loss for epoch 24 is 56.433948674622705
+2019-05-27 13:32:19,518 - brc - INFO - Evaluating the model after epoch 24
+2019-05-27 13:37:13,817 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 13:37:13,817 - brc - INFO - Dev eval result: {'Bleu-1': 0.08988701221531419, 'Bleu-2': 0.06704660449836439, 'Bleu-3': 0.05589815601920164, 'Bleu-4': 0.04957091852099711, 'Rouge-L': 0.0808213157826422}
+2019-05-27 13:37:14,549 - brc - INFO - Training the model for epoch 25
+2019-05-27 13:42:48,498 - brc - INFO - Average train loss for epoch 25 is 56.51898582192028
+2019-05-27 13:42:48,499 - brc - INFO - Evaluating the model after epoch 25
+2019-05-27 13:47:45,588 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 13:47:45,588 - brc - INFO - Dev eval result: {'Bleu-1': 0.13638502881269615, 'Bleu-2': 0.10106809234192386, 'Bleu-3': 0.0838244586445163, 'Bleu-4': 0.07409702502693447, 'Rouge-L': 0.08439337669778768}
+2019-05-27 13:47:46,297 - brc - INFO - Training the model for epoch 26
+2019-05-27 13:53:20,188 - brc - INFO - Average train loss for epoch 26 is 56.451188771163714
+2019-05-27 13:53:20,188 - brc - INFO - Evaluating the model after epoch 26
+2019-05-27 13:57:53,310 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 13:57:53,310 - brc - INFO - Dev eval result: {'Bleu-1': 0.0025582684378943747, 'Bleu-2': 0.0018891750014556705, 'Bleu-3': 0.001566168841742331, 'Bleu-4': 0.0013826840443943694, 'Rouge-L': 0.059344239751604695}
+2019-05-27 13:57:54,023 - brc - INFO - Training the model for epoch 27
+2019-05-27 14:03:15,907 - brc - INFO - Average train loss for epoch 27 is 56.296958825167486
+2019-05-27 14:03:15,907 - brc - INFO - Evaluating the model after epoch 27
+2019-05-27 14:07:56,856 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 14:07:56,856 - brc - INFO - Dev eval result: {'Bleu-1': 2.5345719834798595e-05, 'Bleu-2': 1.8344873588948036e-05, 'Bleu-3': 1.5057862467685316e-05, 'Bleu-4': 1.3241982677588906e-05, 'Rouge-L': 0.04397639916663659}
+2019-05-27 14:07:57,590 - brc - INFO - Training the model for epoch 28
+2019-05-27 14:13:31,852 - brc - INFO - Average train loss for epoch 28 is 56.621478641734406
+2019-05-27 14:13:31,852 - brc - INFO - Evaluating the model after epoch 28
+2019-05-27 14:18:13,213 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 14:18:13,213 - brc - INFO - Dev eval result: {'Bleu-1': 0.0011661384241925697, 'Bleu-2': 0.0008295534282525644, 'Bleu-3': 0.0006700831583758861, 'Bleu-4': 0.0005815393593577912, 'Rouge-L': 0.05973161339820325}
+2019-05-27 14:18:13,930 - brc - INFO - Training the model for epoch 29
+2019-05-27 14:23:48,581 - brc - INFO - Average train loss for epoch 29 is 56.551268970265106
+2019-05-27 14:23:48,581 - brc - INFO - Evaluating the model after epoch 29
+2019-05-27 14:28:32,231 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 14:28:32,232 - brc - INFO - Dev eval result: {'Bleu-1': 0.006077310815417949, 'Bleu-2': 0.004258340055892179, 'Bleu-3': 0.0033963505449772155, 'Bleu-4': 0.002928159958713523, 'Rouge-L': 0.0609561820776056}
+2019-05-27 14:28:32,938 - brc - INFO - Training the model for epoch 30
+2019-05-27 14:33:51,695 - brc - INFO - Average train loss for epoch 30 is 56.490729205748615
+2019-05-27 14:33:51,695 - brc - INFO - Evaluating the model after epoch 30
+2019-05-27 14:38:20,969 - brc - INFO - Dev eval loss 1.4272000408185568e+30
+2019-05-27 14:38:20,969 - brc - INFO - Dev eval result: {'Bleu-1': 0.003715738892221766, 'Bleu-2': 0.002669236222172669, 'Bleu-3': 0.002168192927194459, 'Bleu-4': 0.0018898794078966927, 'Rouge-L': 0.07473425207379061}
+2019-05-27 14:38:21,693 - brc - INFO - ====== Done with model training! ======
+2019-05-27 15:24:51,728 - brc - INFO - ====== evaluating ======
+2019-05-27 15:24:51,728 - brc - INFO - Load data_set and vocab...
+2019-05-27 15:25:08,291 - brc - INFO - Dev set size: 5000 questions.
+2019-05-27 15:25:08,291 - brc - INFO - Converting text into ids...
+2019-05-27 15:25:15,432 - brc - INFO - Restoring the model...
+2019-05-27 15:25:20,557 - brc - INFO - Time to build graph: 3.605330228805542 s
+2019-05-27 15:31:43,263 - brc - INFO - ====== evaluating ======
+2019-05-27 15:31:43,263 - brc - INFO - Load data_set and vocab...
+2019-05-27 15:31:51,470 - brc - INFO - Dev set size: 5000 questions.
+2019-05-27 15:31:51,470 - brc - INFO - Converting text into ids...
+2019-05-27 15:31:58,493 - brc - INFO - Restoring the model...
+2019-05-27 15:32:02,481 - brc - INFO - Time to build graph: 3.2832210063934326 s
