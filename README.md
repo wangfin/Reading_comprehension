@@ -11,6 +11,13 @@ R-net+Dureader数据集的机器阅读理解模型
 
 ## 项目简介
 
-本项目是本人机器阅读理解的第一个练手项目，整个项目借鉴了很多其他优秀的项目架构。整体的机器阅读理解模型使用的 R-net模型 [^R-net]。
+本项目是本人机器阅读理解的第一个练手项目，整个项目借鉴了很多其他优秀的项目架构。整体的机器阅读理解模型使用的 
+
+创建脚注格式类似这样 [^RUNOOB]。
+
+[^RUNOOB]: 菜鸟教程 -- 学的不仅是技术，更是梦想！！！
+
+
+R-net模型[^R-net]。
 
 [^R-net]: Wang W, Yang N, Wei F, et al. R-NET: Machine reading comprehension with self-matching networks[J]. Natural Lang. Comput. Group, Microsoft Res. Asia, Beijing, China, Tech. Rep, 2017, 5.
