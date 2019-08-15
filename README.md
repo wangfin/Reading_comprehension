@@ -3,5 +3,14 @@
 
 毕设项目，机器阅读理解
 
-## 各项配置
-- 数据集：DuReader，百度中文阅读理解数据集(数据集内容过大，不能放上来)
+R-net+Dureader数据集的机器阅读理解模型
+
+## 项目配置
+- 数据集：DuReader，百度中文阅读理解数据集
+- 深度学习：Tensorflow框架
+
+## 项目简介
+
+本项目是本人机器阅读理解的第一个练手项目，整个项目借鉴了很多其他优秀的项目架构。整体的机器阅读理解模型使用的 R-net模型 [^R-net]。
+
+[^R-net]: Wang W, Yang N, Wei F, et al. R-NET: Machine reading comprehension with self-matching networks[J]. Natural Lang. Comput. Group, Microsoft Res. Asia, Beijing, China, Tech. Rep, 2017, 5.
